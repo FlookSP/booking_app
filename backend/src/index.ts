@@ -3,8 +3,8 @@ import cors from 'cors';
 // อ่านไฟล์ .env ในโฟลเดอร์ backend
 import "dotenv/config"
 import mongoose from 'mongoose';
-import userRoutes from "../src/routes/users";
-import authRoutes from "../src/routes/auth";
+import userRoutes from "./routes/users";
+import authRoutes from "./routes/auth";
 import cookieParser from "cookie-parser";
 import path from 'path';
 
