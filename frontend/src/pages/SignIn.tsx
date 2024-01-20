@@ -3,7 +3,7 @@ import * as apiClient from "../api-client";
 import { useForm } from "react-hook-form";
 import { useAppContext } from "../contexts/AppContext";
 import { useMutation, useQueryClient } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // เราต้องกำหนด Type ของ Input ต่าง ๆ ใน Log In Form
 // เพื่อให้ useForm ใช้ในการตรวจสอบข้อมูลที่ผู้ใช้งานกรอกเข้ามา
@@ -124,16 +124,16 @@ const SignIn = () => {
               <span>
                 {" "}
                 ฉันยอมรับ{" "}
-                <a
-                  href="/terms-and-services/"
+                <Link
+                  to="/terms-and-services/"
                   className="text-blue-800 font-semibold"
                 >
                   ข้อกำหนดและเงื่อนไขการใช้งาน
-                </a>{" "}
+                </Link>{" "}
                 และ{" "}
-                <a href="/privacy/" className="text-blue-800 font-semibold">
+                <Link to="/privacy/" className="text-blue-800 font-semibold">
                   แถลงการณ์เกี่ยวกับความเป็นส่วนตัว
-                </a>{" "}
+                </Link>{" "}
                 ของเรา
               </span>
               {/* กำหนดให้แสดงข้อความแจ้งเตือนที่กำหนดเมื่อผู้ใช้งานไม่กรอกข้อมูลในช่องนี้ */}
@@ -153,9 +153,9 @@ const SignIn = () => {
           <div className="w-full flex md:flex-row flex-col pt-8">
             <p className="w-full font-normal text-center text-[16px] leading-[27px] text-black border-t-[1px] border-t-[#5d5d5d] pt-5">
               ยังไม่ได้ลงทะเบียนเป็นสมาชิก?{" "}
-              <a href="/register/" className="text-blue-800 font-semibold">
+              <Link to="/register/" className="text-blue-800 font-semibold">
                 สร้างบัญชี
-              </a>{" "}
+              </Link>{" "}
             </p>
           </div>
         </div>
@@ -169,12 +169,12 @@ const SignIn = () => {
             <div>
               <p className="text-white">
                 เว็บไซต์จองที่พักแบบครบวงจรสำหรับวันหยุดพักผ่อนในฝันของคุณ{" "}
-                <a
-                  href="/how-it-works/"
+                <Link
+                  to="/how-it-works/"
                   className="text-blue-400 font-semibold"
                 >
                   เรียนรู้เพิ่มเติม
-                </a>
+                </Link>
               </p>
             </div>
           </div>

@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api-client";
 import { useAppContext } from "../contexts/AppContext";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // เราต้องกำหนด Type ของ Input ต่าง ๆ ใน Register Form
 // เพื่อให้ useForm ใช้ในการตรวจสอบข้อมูลที่ผู้ใช้งานกรอกเข้ามา
@@ -85,12 +86,12 @@ const Register = () => {
                 มาลงทะเบียนบน ThaiVacationHub.com
                 เพื่อให้เข้าถึงสิทธิพิเศษจากที่พักต่าง ๆ ทั่วไทย
                 หรือลงทะเบียนเพื่อเปิดให้จองที่พักแบบใดก็ได้ของท่านบนเว็บไซต์ของเรา{" "}
-                <a
-                  href="/become-a-partner/"
+                <Link
+                  to="/become-a-partner/"
                   className="text-blue-400 font-semibold"
                 >
                   เรียนรู้เพิ่มเติม
-                </a>
+                </Link>
               </p>
             </div>
           </div>
@@ -205,12 +206,12 @@ const Register = () => {
               <span>
                 {" "}
                 ฉันยอมรับ{" "}
-                <a
-                  href="/terms-and-services/"
+                <Link
+                  to="/terms-and-services/"
                   className="text-blue-800 font-semibold"
                 >
                   ข้อกำหนดและเงื่อนไขการใช้งาน
-                </a>{" "}
+                </Link>{" "}
               </span>
               {/* กำหนดให้แสดงข้อความแจ้งเตือนที่กำหนดเมื่อผู้ใช้งานไม่กรอกข้อมูลในช่องนี้ */}
               {errors.checked && (
