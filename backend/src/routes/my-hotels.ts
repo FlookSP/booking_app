@@ -124,7 +124,7 @@ router.post(
 // โดยจะคืนค่าเป็น Array ชื่อไฟล์ที่จัดเก็บสำเร็จ ซึ่งสามารถมีสมาชิกได้ 0 ตัวหรือมากกว่า
 router.post(
   "/files",
-  IpFilter(trustedIPs,{mode: 'allow'}), // อนุญาตให้เฉพาะ Request ที่มาจากหมายเลข IP ที่กำหนดเท่านั้นสามารถเพิ่มข้อมูลได้
+  IpFilter(trustedIPs,{mode: 'allow'}), // อนุญาตให้เฉพาะ Request ที่มาจากหมายเลข IP ที่กำหนดเท่านั้นสามารถลบข้อมูลได้
   upload.array("file"), // อนุญาตให้อับโหลดไฟล์ได้ไม่จำกัดจำนวนไฟล์
   (req: Request, res: Response) => {
     // upload.array("file") จะเป็นฟังก์ชันที่ทำหน้าที่อับโหลดไฟล์
