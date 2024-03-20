@@ -5,6 +5,7 @@ import Layout from "./layouts/Layout";
 import { SearchBar } from "../src/components";
 import { Home, Register, NotFound, SignIn } from "./pages";
 import { useAppContext } from "./contexts/AppContext";
+import AddHotel from "./pages/AddHotel";
 
 const App = () => {
   const { isLoggiedIn, userInfo } = useAppContext();
@@ -47,6 +48,14 @@ const App = () => {
         {isLoggiedIn && (
           <>
             <Route
+              path="/add-hotel"
+              element={
+                <Layout>
+                  <AddHotel />
+                </Layout>
+              }
+            />
+            <Route
               path="/my-hotel"
               element={
                 <Layout>
@@ -62,21 +71,25 @@ const App = () => {
                 </Layout>
               }
             />
-          </>          
+          </>
         )}
         {/* ต้องล็อกอินแล้วและมีสิทธิ์เป็นผู้ดูแลระบบขึ้นไป ถึงจะไปยัง Route เหล่านี้ได้ */}
-        {isLoggiedIn && (userInfo && [ 'admin', 'superadmin' ].some((element)=> userInfo.userRole.includes(element))) && (
-        <>
-          <Route
-              path="/my-dashboard"
-              element={
-                <Layout>
-                  <div>นี่คือ My Dashboard</div>
-                </Layout>
-              }
-            />
-        </>
-        )}
+        {isLoggiedIn &&
+          userInfo &&
+          ["admin", "superadmin"].some((element) =>
+            userInfo.userRole.includes(element)
+          ) && (
+            <>
+              <Route
+                path="/my-dashboard"
+                element={
+                  <Layout>
+                    <div>นี่คือ My Dashboard</div>
+                  </Layout>
+                }
+              />
+            </>
+          )}
         {/* Default Route ในกรณีที่ไม่มี Page ข้างบน */}
         <Route
           path="*"

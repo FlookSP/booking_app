@@ -66,3 +66,18 @@ export const signIn = async (formData: SignInFormData) => {
   }
   return body;
 };
+
+// ฟังก์ชันเพิ่มข้อมูลที่พัก สำหรับทำงานกับ /api/my-hotels
+export const addHotel = async (hotelFormData: FormData) => {
+  const response = await fetch(`${API_BASE_URL}/api/my-hotels`, {
+    method: "POST",
+    credentials: "include", // กำหนดให้ใส่ Cookies ใน Request ที่ส่งไป Backend
+    body: hotelFormData,
+  });
+
+  if (!response.ok) {
+    throw new Error("ไม่สามารถเพิ่มข้อมูลที่พักได้");
+  }
+
+  return response.json();
+};
