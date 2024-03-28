@@ -24,7 +24,7 @@ const Header = () => {
       // ซึ่งในที่นี้คือ การลบค่า Token เก่าออกไปนั่นเอง (apiClient.signOut) และมันจะทำการ Refresh UI เพื่อแสดงเมนูอย่างเหมาะสม
       await queryClient.invalidateQueries("validateToken");
       showToast({ message: "ออกจากระบบเรียบร้อยแล้ว", type: "SUCCESS" });
-      // เมื่อผู้ใช้งานทำการ Register ได้สำเร็จ โปรแกรมจะทำการไปยังหน้า Home Page
+      // โปรแกรมจะทำการไปยังหน้า Home Page
       navigate("/");
     },
     onError: (error: Error) => {
@@ -41,212 +41,230 @@ const Header = () => {
   const [toggle, setToggle] = useState(false);
 
   return (
-    // กำหนดสีพื้นหลังเป็นสีน้ำเงิน ตัวเลข 800 คือ ความเข้มของสี โดยตัวเลขยิ่งมากจะยิ่งเข้ม
-    // py-6 คือ Padding Y ทั้งบนและล่าง 6px ส่งผลต่อขนาดของสีพื้นหลังจะยิ่งสูง
-    <div className="bg-blue-800 py-6">
-      {/* sm:px-16 px-6 คือ ถ้า Small Device ให้ Padding X จำนวน 6px แต่ถ้าไม่ใช่ ให้ Padding X จำนวน 16px */}
-      <div className="flex justify-between sm:px-16 px-6">
-        {/* text-2xl คือ ขนาดตัวอักษรใหญ่กว่า xl 2 เท่า, tracking-tight คือ ตัวอักษรจะอยู่ชิดกันกว่าปกติ */}
-        <span className="text-2xl text-white font-bold tracking-tight">
-          <Link to="/">ThaiVacationHub.com</Link>
-        </span>
-        {/* space-x-2 คือ กำหนดระยะห่างระหว่าง Child Element ในนี้เป็นระยะ 2px */}
-        {/* sm:flex hidden หมายถึง เมื่อไม่ใช่ Mobile กำหนดให้ Navbar ให้แสดงข้อความเมนู */}
-        <span className="sm:flex hidden space-x-2">
-          {/* ถ้ามีการล็อกอินแล้วเป็นผู้ดูแลระบบขึ้นไป */}
-          {isLoggiedIn &&
-            userInfo &&
-            ["admin", "superadmin"].some((element) =>
-              userInfo.userRole.includes(element)
-            ) && (
-              <>
-                <Link
-                  to="/my-dashboard"
-                  className="flex items-center text-white px-3 hover:text-gray-300"
-                >
-                  แดชบอร์ด
-                </Link>
-                <Link
-                  to="/my-booking"
-                  className="flex items-center text-white px-3 hover:text-gray-300"
-                >
-                  การจองของฉัน
-                </Link>
-                <Link
-                  to="/my-hotel"
-                  className="flex items-center text-white px-3 hover:text-gray-300"
-                >
-                  ที่พักของฉัน
-                </Link>
+    <>
+      <nav className="bg-[#FCF8F1] bg-opacity-30">
+        <div className="px-4 mx-auto sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 lg:h-20">
+            <span className="text-2xl text-gray-800 font-bold tracking-tight">
+              <Link to="/">ThaiVacationHub.com</Link>
+            </span>
 
-                <button
-                  onClick={handleClick} // เรียกใช้งานฟังก์ชัน handleClick
-                  className="py-2 px-3 text-[14px] text-blue-700 bg-white outline-blue-700 hover:bg-gray-200 rounded"
-                >
-                  ออกจากระบบ
-                </button>
-              </>
-            )}
-          {/* ถ้ามีการล็อกอินแล้วเป็นผู้ใช้งานทั่วไป */}
-          {isLoggiedIn &&
-            !(
-              userInfo &&
-              ["admin", "superadmin"].some((element) =>
-                userInfo.userRole.includes(element)
-              )
-            ) && (
-              <>
-                <Link
-                  to="/my-booking"
-                  className="flex items-center text-white px-3 hover:text-gray-300"
-                >
-                  การจองของฉัน
-                </Link>
-                <Link
-                  to="/my-hotel"
-                  className="flex items-center text-white px-3 hover:text-gray-300"
-                >
-                  ที่พักของฉัน
-                </Link>
+            <div className=" hidden lg:flex lg:items-center lg:justify-center lg:space-x-10">
+              <Link
+                to="/company"
+                title=""
+                className="text-base text-black transition-all duration-200 hover:text-opacity-80"
+              >
+                {" "}
+                เกี่ยวกับเรา{" "}
+              </Link>
 
-                <button
-                  onClick={handleClick} // เรียกใช้งานฟังก์ชัน handleClick
-                  className="py-2 px-3 text-[14px] text-blue-700 bg-white outline-blue-700 hover:bg-gray-200 rounded"
-                >
-                  ออกจากระบบ
-                </button>
-              </>
-            )}
-          {/* ถ้ายังไม่มีการล็อกอิน */}
-          {!isLoggiedIn && (
-            <Link
-              to="/sign-in"
-              className="py-2 px-3 text-[14px] text-blue-700 bg-white outline-blue-700 hover:bg-gray-200 rounded"
-            >
-              เข้าสู่ระบบ
-            </Link>
-          )}
-        </span>
-        {/* ถ้าเป็น Mobile ให้แสดงรายการ Navbar แบบ Hamberger Menu */}
-        <div className="sm:hidden justify-end items-end">
-          {/* ถ้าเปิดเมนูเมื่อเป็น Mobile ให้แสดงเมนู Close ด้วย และทำการอับเดต State ด้วย Prev*/}
-          <img
-            src={toggle ? close : menu}
-            alt="menu"
-            className="w-[28px] h-[28px] object-contain"
-            onClick={() => setToggle((prev) => !prev)}
-          />
-          {/* ตรวจสอบ toggle ว่ามีการ เปิด/ปิด รายการเมนูหรือไม่ */}
-          <div
-            className={`${
-              !toggle ? "hidden" : "flex"
-            } p-6 bg-blue-700 absolute top-20 right-0 mx-4 my-2 min-w-[140px] rounded-xl sidebar`}
-          >
-            <span className="list-none flex justify-end items-start flex-col">
-              {/* ถ้ามีการล็อกอินแล้วเป็นผู้ดูแลระบบขึ้นไป */}
+              <Link
+                to="/service"
+                title=""
+                className="text-base text-black transition-all duration-200 hover:text-opacity-80"
+              >
+                {" "}
+                บริการของเรา{" "}
+              </Link>
+
+              <Link
+                to="/feature"
+                title=""
+                className="text-base text-black transition-all duration-200 hover:text-opacity-80"
+              >
+                {" "}
+                สิ่งที่น่าสนใจ{" "}
+              </Link>
+
+              <Link
+                to="/help"
+                title=""
+                className="text-base text-black transition-all duration-200 hover:text-opacity-80"
+              >
+                {" "}
+                ความช่วยเหลือ{" "}
+              </Link>
+
               {isLoggiedIn &&
                 userInfo &&
-                ["admin", "superadmin"].some((element) =>
+                ["user"].some((element) =>
                   userInfo.userRole.includes(element)
                 ) && (
-                  <>
-                    <Link
-                      to="/my-dashboard"
-                      onClick={() => {
-                        setToggle((prev) => !prev); // กำหนดให้ซ่อนเมนูย่อยหลังจากคลิ๊กเลือกแล้ว
-                      }}
-                      className="flex items-center text-white px-3 hover:text-gray-300"
-                    >
-                      แดชบอร์ด
-                    </Link>
-                    <Link
-                      to="/my-booking"
-                      onClick={() => {
-                        setToggle((prev) => !prev); // กำหนดให้ซ่อนเมนูย่อยหลังจากคลิ๊กเลือกแล้ว
-                      }}
-                      className="flex items-center text-white px-3"
-                    >
-                      การจองของฉัน
-                    </Link>
-                    <Link
-                      to="/my-hotel"
-                      onClick={() => {
-                        setToggle((prev) => !prev); // กำหนดให้ซ่อนเมนูย่อยหลังจากคลิ๊กเลือกแล้ว
-                      }}
-                      className="flex items-center text-white px-3"
-                    >
-                      ที่พักของฉัน
-                    </Link>
-
-                    <Link
-                      to={"/"}
-                      onClick={() => {
-                        setToggle((prev) => !prev); // กำหนดให้ซ่อนเมนูย่อยหลังจากคลิ๊กเลือกแล้ว
-                        handleClick(); // กำหนดให้เรียกใช้งานฟังก์ชัน handleClick
-                      }}
-                      className="flex items-center text-white px-3"
-                    >
-                      ออกจากระบบ
-                    </Link>
-                  </>
+                  <Link
+                    to="/my-booking"
+                    onClick={() => {
+                      setToggle((prev) => !prev);
+                    }} // เรียกใช้งานฟังก์ชัน handleClick
+                    className="text-base text-black transition-all duration-200 hover:text-opacity-80"
+                  >
+                    {" "}
+                    การจองของฉัน{" "}
+                  </Link>
                 )}
-              {/* ถ้ามีการล็อกอินแล้วเป็นผู้ใช้งานทั่วไป */}
+
               {isLoggiedIn &&
-                !(
-                  userInfo &&
-                  ["admin", "superadmin"].some((element) =>
-                    userInfo.userRole.includes(element)
-                  )
+                userInfo &&
+                ["admin"].some((element) =>
+                  userInfo.userRole.includes(element)
                 ) && (
-                  <>
-                    <Link
-                      to="/my-booking"
-                      onClick={() => {
-                        setToggle((prev) => !prev); // กำหนดให้ซ่อนเมนูย่อยหลังจากคลิ๊กเลือกแล้ว
-                      }}
-                      className="flex items-center text-white px-3"
-                    >
-                      การจองของฉัน
-                    </Link>
-                    <Link
-                      to="/my-hotel"
-                      onClick={() => {
-                        setToggle((prev) => !prev); // กำหนดให้ซ่อนเมนูย่อยหลังจากคลิ๊กเลือกแล้ว
-                      }}
-                      className="flex items-center text-white px-3"
-                    >
-                      ที่พักของฉัน
-                    </Link>
-
-                    <Link
-                      to={"/"}
-                      onClick={() => {
-                        setToggle((prev) => !prev); // กำหนดให้ซ่อนเมนูย่อยหลังจากคลิ๊กเลือกแล้ว
-                        handleClick(); // กำหนดให้เรียกใช้งานฟังก์ชัน handleClick
-                      }}
-                      className="flex items-center text-white px-3"
-                    >
-                      ออกจากระบบ
-                    </Link>
-                  </>
+                  <Link
+                    to="/my-hotel"
+                    onClick={() => {
+                      setToggle((prev) => !prev);
+                    }} // เรียกใช้งานฟังก์ชัน handleClick
+                    className="text-base text-black transition-all duration-200 hover:text-opacity-80"
+                  >
+                    {" "}
+                    ที่พักของฉัน{" "}
+                  </Link>
                 )}
+            </div>
+
+            {/* ถ้ายังไม่มีการล็อกอิน */}
+            {!isLoggiedIn && (
+              <Link
+                to="/sign-in"
+                title=""
+                className="hidden lg:inline-flex items-center justify-center px-5 py-2.5 text-base transition-all duration-200 hover:bg-yellow-300 hover:text-black focus:text-black focus:bg-yellow-300 font-semibold text-white bg-blue-700 rounded-full w-fit"
+                role="button"
+              >
+                {" "}
+                เข้าสู่ระบบ{" "}
+              </Link>
+            )}
+
+            {isLoggiedIn && (
+              <Link
+                to="/sign-out"
+                onClick={handleClick} // เรียกใช้งานฟังก์ชัน handleClick
+                className="hidden lg:inline-flex items-center justify-center px-5 py-2.5 text-base transition-all duration-200 hover:bg-yellow-300 hover:text-black focus:text-black focus:bg-yellow-300 font-semibold text-white bg-blue-700 rounded-full w-fit"
+                role="button"
+              >
+                {" "}
+                ออกจากระบบ{" "}
+              </Link>
+            )}
+
+            {/* Mobile nav */}
+            <img
+              className=" bg-gray-300 inline-flex p-2 text-black transition-all duration-200 rounded-md lg:hidden focus:bg-gray-400 hover:bg-gray-400 w-[28px] h-[28px] object-contain"
+              onClick={() => setToggle((prev) => !prev)}
+              src={toggle ? close : menu}
+            ></img>
+            <div
+              className={` flex flex-col
+                 md:hidden bg-white fixed w-full top-20 overflow-y-auto bottom-0 py-3 gap-y-3 pl-4 duration-500 z-10 ${
+                   toggle ? "left-0" : "left-[-100%]"
+                 }
+                `}
+            >
+              <Link
+                to="/company"
+                title=""
+                className="text-base text-black transition-all duration-200 hover:text-opacity-80"
+                onClick={() => setToggle((prev) => !prev)}
+              >
+                {" "}
+                เกี่ยวกับเรา{" "}
+              </Link>
+
+              <Link
+                to="/service"
+                title=""
+                className="text-base text-black transition-all duration-200 hover:text-opacity-80"
+                onClick={() => setToggle((prev) => !prev)}
+              >
+                {" "}
+                บริการของเรา{" "}
+              </Link>
+
+              <Link
+                to="/feature"
+                title=""
+                className="text-base text-black transition-all duration-200 hover:text-opacity-80"
+                onClick={() => setToggle((prev) => !prev)}
+              >
+                {" "}
+                สิ่งที่น่าสนใจ{" "}
+              </Link>
+
+              <Link
+                to="/help"
+                title=""
+                className="text-base text-black transition-all duration-200 hover:text-opacity-80"
+                onClick={() => setToggle((prev) => !prev)}
+              >
+                {" "}
+                ความช่วยเหลือ{" "}
+              </Link>
+
+              {isLoggiedIn &&
+                userInfo &&
+                ["user"].some((element) =>
+                  userInfo.userRole.includes(element)
+                ) && (
+                  <Link
+                    to="/my-booking"
+                    onClick={() => {
+                      setToggle((prev) => !prev);
+                    }} // เรียกใช้งานฟังก์ชัน handleClick
+                    className="text-base text-black transition-all duration-200 hover:text-opacity-80"
+                  >
+                    {" "}
+                    การจองของฉัน{" "}
+                  </Link>
+                )}
+
+              {isLoggiedIn &&
+                userInfo &&
+                ["admin"].some((element) =>
+                  userInfo.userRole.includes(element)
+                ) && (
+                  <Link
+                    to="/my-hotel"
+                    onClick={() => {
+                      setToggle((prev) => !prev);
+                    }} // เรียกใช้งานฟังก์ชัน handleClick
+                    className="text-base text-black transition-all duration-200 hover:text-opacity-80"
+                  >
+                    {" "}
+                    ที่พักของฉัน{" "}
+                  </Link>
+                )}
+
               {/* ถ้ายังไม่มีการล็อกอิน */}
               {!isLoggiedIn && (
                 <Link
                   to="/sign-in"
-                  onClick={() => {
-                    setToggle((prev) => !prev); // กำหนดให้ซ่อนเมนูย่อยหลังจากคลิ๊กเลือกแล้ว
-                  }}
-                  className="flex items-center text-white px-3"
+                  title=""
+                  className=" items-center justify-center px-5 py-2.5 text-base transition-all duration-200 hover:bg-yellow-300 hover:text-black focus:text-black focus:bg-yellow-300 font-semibold text-white bg-blue-700 rounded-full w-fit"
+                  role="button"
+                  onClick={() => setToggle((prev) => !prev)}
                 >
-                  เข้าสู่ระบบ
+                  {" "}
+                  เข้าสู่ระบบ{" "}
                 </Link>
               )}
-            </span>
+              {isLoggiedIn && (
+                <Link
+                  to="/sign-out"
+                  onClick={() => {
+                    setToggle((prev) => !prev);
+                    handleClick();
+                  }} // เรียกใช้งานฟังก์ชัน handleClick
+                  className="items-center justify-center px-5 py-2.5 text-base transition-all duration-200 hover:bg-yellow-300 hover:text-black focus:text-black focus:bg-yellow-300 font-semibold text-white bg-blue-700 rounded-full w-fit"
+                  role="button"
+                >
+                  {" "}
+                  ออกจากระบบ{" "}
+                </Link>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </nav>
+    </>
   );
 };
 

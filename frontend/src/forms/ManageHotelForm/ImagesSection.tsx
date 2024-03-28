@@ -50,7 +50,7 @@ const ImagesSection = () => {
           accept="image/*" // อนุญาตให้อับโหลดไฟล์ประเภทรูปภาพเท่านั้น
           {...register("imageFiles", {
             validate: (imageFiles) => {
-              const totalLength = imageFiles.length;
+              const totalLength = imageFiles.length + (existingImages?.length || 0);
               if (totalLength === 0) {
                 return "อับโหลดรูปภาพอย่างน้อยหนึ่งภาพ";
               } else if (totalLength > 6) {
