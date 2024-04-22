@@ -55,7 +55,7 @@ export type HotelType = {
 };
 // สร้าง Type สำหรับกำหนดว่า Argument ที่ ManageHotelForm Component นี้สามารถรับค่ามาได้นั้น จะเป็นข้อมูลแบบ HotelType
 type Props = {
-  hotel?: HotelType;
+  hotel?: HotelType; // hotel เป็น Optional Props เพราะเราสามารถส่งค่าผ่านทาง EditHotel.tsx หรือ MyHotels.tsx
   onSave: (HotelFormData: FormData) => void;
   isLoading: boolean;
 };
@@ -71,10 +71,20 @@ const ManageHotelForm = ({ onSave, isLoading, hotel }: Props) => {
     handleSubmit, // ฟังก์ชันที่จะจัดการตรวจสอบฟอร์มเมื่อกดปุ่ม type "submit"
     reset, // ฟังก์ชันจาก React Hook Form สำหรับ Reset ข้อมูลในฟอร์ม
   } = formMethods;
+
+  // ถ้ามีการส่งข้อมูลที่พักมาด้วยผ่านทาง hotel
+  useEffect(() => {
+    reset(hotel); // จัดการแสดงข้อมูลที่พักนั้นในแบบฟอร์มนี้ด้วย reset
+  }, [hotel, reset]); // ทำงานใน useEffect นี้เมื่อมีการแก้ไขค่า hotel, reset
+
   // เรากำหนดฟังก์ชันชื่อ onSubmit ใน ManageHotelForm
   // ให้ทำงานร่วมกับฟังก์ชัน handleSubmit ใน react-hook-form
-  const onSubmit = handleSubmit((formDataJson: HotelFormData) => {    
+  const onSubmit = handleSubmit((formDataJson: HotelFormData) => {
     const formData = new FormData();
+    // ถ้ามีการส่งข้อมูลที่พักมาให้
+    if (hotel) {
+      formData.append("hotelId", hotel._id); // เก็บ hotelId ไว้ใช้อ้างอิงภายหลัง
+    }
     formData.append("name", formDataJson.name);
     formData.append("city", formDataJson.city);
     formData.append("country", formDataJson.country);
@@ -88,6 +98,7 @@ const ManageHotelForm = ({ onSave, isLoading, hotel }: Props) => {
     formDataJson.facilities.forEach((facility, index) => {
       formData.append(`facilities[${index}]`, facility);
     });
+    // ปรับปรุง imageUrls ให้เป็นรายชื่อไฟล์ที่ผู้ใช้งานเลือกมาล่าสุด
     if (formDataJson.imageUrls) {
       formDataJson.imageUrls.forEach((url, index) => {
         formData.append(`imageUrls[${index}]`, url);
@@ -97,7 +108,7 @@ const ManageHotelForm = ({ onSave, isLoading, hotel }: Props) => {
     Array.from(formDataJson.imageFiles).forEach((imageFile) => {
       formData.append("imageFiles", imageFile);
     });
-    // บันทึกข้อมูลในฐานช้อมูล
+    // บันทึกข้อมูลในฐานข้อมูล
     onSave(formData);
   });
   // กำหนดให้เรียกใช้งาน useEffect เมื่อมีการ Render Component นี้หรือเมื่อมีการเรียกใช้งานฟังก์ชัน reset
@@ -109,7 +120,7 @@ const ManageHotelForm = ({ onSave, isLoading, hotel }: Props) => {
     // FormProvider จะส่งข้อมูลในแบบฟอร์มนี้ไปยัง formMethods
     <FormProvider {...formMethods}>
       <form
-        className="flex flex-col gap-10 mt-5 mb-5 ml-5 mr-5"
+        className="flex flex-col gap-10 container mx-auto "
         onSubmit={onSubmit}
       >
         <DetailsSection />

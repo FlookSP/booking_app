@@ -5,26 +5,29 @@ import { HotelFormData } from "./ManageHotelForm";
 const FacilitiesSection = () => {
   const {
     register,
-    formState: {errors}
+    formState: { errors }
   } = useFormContext<HotelFormData>();
 
   return (
     <div>
       <h2 className="text-2xl font-bold mb-3">สิ่งอำนวยความสะดวก</h2>
-      <div className="grid grid-cols-5 gap-3">
-        {hotelFacilities.map((facilities, index)=>(
+      {/* max-sm:grid-cols-3 คือ ถ้าเป็น Mobile ให้แสดงแถวละ 3 */}
+      <div className="grid grid-cols-5 gap-3 max-sm:grid-cols-3">
+        {hotelFacilities.map((facilities, index) => (
           <label key={index} className="flex text-sm text-gray-700 gap-1">
-            <input             
-            type="checkbox"
-            value={facilities}
-            {...register("facilities",{validate: (facilities)=>{
-              if(facilities && facilities.length > 0){
-                return true;
-              }
-              else{
-                return "จำเป็นต้องระบุสิ่งอำนวยความสะดวกอย่างน้อยหนึ่งอย่าง"
-              }
-            }})}
+            <input
+              type="checkbox"
+              value={facilities}
+              {...register("facilities", {
+                validate: (facilities) => {
+                  if (facilities && facilities.length > 0) {
+                    return true;
+                  }
+                  else {
+                    return "จำเป็นต้องระบุสิ่งอำนวยความสะดวกอย่างน้อยหนึ่งอย่าง"
+                  }
+                }
+              })}
             />
             {facilities}
           </label>

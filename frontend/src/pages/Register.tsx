@@ -15,6 +15,7 @@ export type RegisterFormData = {
   password: string;
   confirmPassword: string;
   checked: boolean;
+  role: string; // role สำหรับผู้ใช้งาน
 };
 
 const Register = () => {
@@ -48,8 +49,8 @@ const Register = () => {
       // และทาง frontend จะทำการตรวจสอบกับทาง backend อีกครั้ง 
       // ซึ่งผลที่ได้คือมันจะยังคงเป็น Token เดิม แต่ว่าผลลัพธ์อีกอย่างที่ได้มาคือการบังคับให้มีการ Refresh UI อีกรอบ
       await queryClient.invalidateQueries("validateToken");
-      // เมื่อผู้ใช้งานทำการ Register ได้สำเร็จ โปรแกรมจะทำการไปยังหน้า Home Page
-      navigate("/");
+      // เมื่อผู้ใช้งานทำการ Register ได้สำเร็จ โปรแกรมจะทำการไปยังหน้าที่กำหนด
+      navigate("/company");
     },
     // ถ้ามีข้อผิดพลาดเกิดขึ้นให้แสดงข้อความา Error ที่เกิดขึ้น
     // ในฟังก์ชัน register เรากำหนดให้ทำการ throw new Error(responseBody.message)
@@ -226,7 +227,21 @@ const Register = () => {
                 ดำเนินการลงทะเบียน
               </button>
             </div>
+            <div>
+              <input
+                {...register("role")} // กำหนดให้ส่ง hidden input field ชื่อ role ไปใน Form นี้ด้วย
+                type="hidden"
+                value="user" // กำหนด role เป็น user
+              /></div>
           </form>
+          <div className="w-full flex md:flex-row flex-col pt-8">
+            <p className="w-full font-normal text-center text-[16px] leading-[27px] text-black border-t-[1px] border-t-[#5d5d5d] pt-5">
+              สร้างแอคเคาท์เพื่อลงทะเบียนและจัดการที่พักของท่าน?<br />
+              <Link to="/enroll/" className="text-blue-800 font-semibold">
+                สร้างแอคเคาท์สำหรับคู่ค้า
+              </Link>{" "}
+            </p>
+          </div>
         </div>
       </div>
     </div>

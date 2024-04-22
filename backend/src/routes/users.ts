@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import User from "../models/user";
 import jwt from "jsonwebtoken";
 import { check, validationResult } from "express-validator";
+import func from "../middleware/auth";
 
 // สร้าง Express Router
 const router = express.Router();
@@ -40,26 +41,13 @@ router.post(
             "อีเมลดังกล่าวถูกใช้งานแล้วโดยผู้ใช้งานคนอื่น โปรดระบุอีเมลอื่น",
         });
       } else {
-        // บันทึกข้อมูลที่รับเข้ามาลงใน User Document
-        if (typeof req.body.role !== 'undefined') {
-          // กรณีที่ Register ด้วย Registration API
-          user = new User({
-            email: req.body.email,
-            password: req.body.password,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            role: req.body.role,
-          });
-        } else {
-          // กรณีที่ Register ด้วย Registration Form
-          user = new User({
-            email: req.body.email,
-            password: req.body.password,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            role: "user",
-          });
-        }
+        user = new User({
+          email: req.body.email,
+          password: req.body.password,
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          role: req.body.role, // จะถูกส่งมาแบบ Hidden Field
+        });
 
         await user.save();
         // ทำการสร้าง JWT Token
@@ -89,5 +77,23 @@ router.post(
     }
   }
 );
+
+// สร้าง Get End Point "/api/users/me"
+// ฟังก์ชันสำหรับเรียกดูข้อมูลผู้ใช้งานที่ล็อกอินเข้ามาในปัจจุบัน 
+router.get("/me", func.verifyToken, async (req: Request, res: Response) => {
+  const userId = req.userId;
+
+  try {
+    // select("-password") คือ บอกให้ MongoDB ไม่ต้องส่ง Password ใน Response ที่ตอบกลับมาเพื่อความปลอดภัย
+    const user = await User.findById(userId).select("-password");
+    if (!user) {
+      return res.status(400).json({ message: "ไม่พบผู้ใช้งาน" });
+    }
+    res.json(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "มีข้อผิดพลาดเกิดขึ้น" });
+  }
+});
 
 export default router;

@@ -60,7 +60,7 @@ const Header = () => {
               </Link>
 
               <Link
-                to="/service"
+                to="/search" // ให้ไปยัง Route "/search"
                 title=""
                 className="text-base text-black transition-all duration-200 hover:text-opacity-80"
               >
@@ -108,16 +108,28 @@ const Header = () => {
                 ["admin"].some((element) =>
                   userInfo.userRole.includes(element)
                 ) && (
-                  <Link
-                    to="/my-hotel"
+                  <><Link
+                    to="/my-booking"
                     onClick={() => {
                       setToggle((prev) => !prev);
                     }} // เรียกใช้งานฟังก์ชัน handleClick
                     className="text-base text-black transition-all duration-200 hover:text-opacity-80"
                   >
                     {" "}
-                    ที่พักของฉัน{" "}
+                    การจองของฉัน{" "}
                   </Link>
+                    <Link
+                      to="/my-hotel"
+                      onClick={() => {
+                        setToggle((prev) => !prev);
+                      }} // เรียกใช้งานฟังก์ชัน handleClick
+                      className="text-base text-black transition-all duration-200 hover:text-opacity-80"
+                    >
+                      {" "}
+                      ที่พักของฉัน{" "}
+                    </Link>
+                  </>
+
                 )}
             </div>
 
@@ -146,7 +158,7 @@ const Header = () => {
               </Link>
             )}
 
-            {/* Mobile nav */}
+            {/* กรณีเป็น Mobile Device */}
             <img
               className=" bg-gray-300 inline-flex p-2 text-black transition-all duration-200 rounded-md lg:hidden focus:bg-gray-400 hover:bg-gray-400 w-[28px] h-[28px] object-contain"
               onClick={() => setToggle((prev) => !prev)}
@@ -154,9 +166,8 @@ const Header = () => {
             ></img>
             <div
               className={` flex flex-col
-                 md:hidden bg-white fixed w-full top-20 overflow-y-auto bottom-0 py-3 gap-y-3 pl-4 duration-500 z-10 ${
-                   toggle ? "left-0" : "left-[-100%]"
-                 }
+              lg:hidden bg-white fixed w-full h-full top-16 overflow-y-auto bottom-0 py-3 gap-y-3 pl-4 duration-500 z-10 ${toggle ? "left-0" : "left-[-100%]"
+                }
                 `}
             >
               <Link
@@ -170,7 +181,7 @@ const Header = () => {
               </Link>
 
               <Link
-                to="/service"
+                to="/search"
                 title=""
                 className="text-base text-black transition-all duration-200 hover:text-opacity-80"
                 onClick={() => setToggle((prev) => !prev)}
@@ -221,16 +232,27 @@ const Header = () => {
                 ["admin"].some((element) =>
                   userInfo.userRole.includes(element)
                 ) && (
-                  <Link
-                    to="/my-hotel"
+                  <><Link
+                    to="/my-booking"
                     onClick={() => {
                       setToggle((prev) => !prev);
                     }} // เรียกใช้งานฟังก์ชัน handleClick
                     className="text-base text-black transition-all duration-200 hover:text-opacity-80"
                   >
                     {" "}
-                    ที่พักของฉัน{" "}
+                    การจองของฉัน{" "}
                   </Link>
+                    <Link
+                      to="/my-hotel"
+                      onClick={() => {
+                        setToggle((prev) => !prev);
+                      }} // เรียกใช้งานฟังก์ชัน handleClick
+                      className="text-base text-black transition-all duration-200 hover:text-opacity-80"
+                    >
+                      {" "}
+                      ที่พักของฉัน{" "}
+                    </Link>
+                  </>
                 )}
 
               {/* ถ้ายังไม่มีการล็อกอิน */}

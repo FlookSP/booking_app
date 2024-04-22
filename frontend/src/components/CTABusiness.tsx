@@ -27,7 +27,7 @@ const CTABusiness = () => {
               ลงทะเบียนง่าย ๆ รวดเร็ว และไม่มีค่าใช้จ่าย
             </p>
             <Link
-              to="/register"
+              to="/enroll"
               title=""
               className="inline-flex items-center justify-center px-8 py-3 mt-8 text-base font-semibold text-white transition-all duration-200 bg-blue-600 rounded-md hover:bg-blue-700 focus:bg-blue-700"
               role="button"

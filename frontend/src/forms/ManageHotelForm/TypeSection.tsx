@@ -16,7 +16,7 @@ const TypeSection = () => {
     <div>
       <h2 className="text-2xl font-bold mb-3">ประเภทที่พัก</h2>
       {/* แสดงได้สูงสุด 5 ตัว */}
-      <div className="grid grid-cols-5 gap-2">
+      <div className="grid grid-cols-5 gap-2 max-sm:grid-cols-3">
         {hotelTypes.map((type, index) => (
           <label
             key={index}

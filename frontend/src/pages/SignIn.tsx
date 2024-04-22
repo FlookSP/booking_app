@@ -3,7 +3,7 @@ import * as apiClient from "../api-client";
 import { useForm } from "react-hook-form";
 import { useAppContext } from "../contexts/AppContext";
 import { useMutation, useQueryClient } from "react-query";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 // เราต้องกำหนด Type ของ Input ต่าง ๆ ใน Log In Form
 // เพื่อให้ useForm ใช้ในการตรวจสอบข้อมูลที่ผู้ใช้งานกรอกเข้ามา
@@ -20,6 +20,8 @@ const SignIn = () => {
   const { showToast } = useAppContext();
   // เพื่อเรียกใช้งาน invalidateQueries ในการปรับปรุง UI ให้ทันสมัย
   const queryClient = useQueryClient();
+
+  const location = useLocation();
 
   // เราต้องกำหนดว่าจะใช้งานฟังก์ชันดังต่อไปนี้ใน useForm
   // สำหรับทำหน้าที่ตรวจสอบ Input ต่าง ๆ ใน Log In Form
@@ -43,8 +45,10 @@ const SignIn = () => {
       // และทาง frontend จะทำการตรวจสอบกับทาง backend อีกครั้ง 
       // ซึ่งผลที่ได้คือมันจะยังคงเป็น Token เดิม และบังคับให้มีการ Refresh UI ซึ่งจะทำให้แสดงเมนูใหม่ตามสิทธิ์ได้ถูกต้อง
       await queryClient.invalidateQueries("validateToken");
-      // เมื่อผู้ใช้งานทำการ Log In ได้สำเร็จ โปรแกรมจะทำการไปยังหน้า Home Page
-      navigate("/");
+      // เมื่อผู้ใช้งานทำการ Log In ได้สำเร็จ โปรแกรมจะทำการไปยังหน้าที่กำหนด
+      // ตรวจสอบว่ามีการกำหนดค่าใน location.state? หรือไม่ ถ้าใช่ ให้ navigate ไปยัง from?.pathname หรือหน้าเดิมก่อนล็อกอิน ซึ่งจะมีปุ่มให้จองที่พักได้ขึ้นมาแทน 
+      // แต่ถ้าไม่ใช่ให้ไปหน้า Home แทน
+      navigate(location.state?.from?.pathname || "/");
     },
     // ถ้ามีข้อผิดพลาดเกิดขึ้นให้แสดงข้อความา Error ที่เกิดขึ้น
     // ในฟังก์ชัน register เรากำหนดให้ทำการ throw new Error(responseBody.message)

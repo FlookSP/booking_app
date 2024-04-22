@@ -36,10 +36,10 @@ router.post(
       // ทำการค้นหา email จาก MongoDB
       const user = await User.findOne({ email });
       // ถ้าไม่เจอ user ที่ใช้งาน email ดังกล่าว ให้แจ้งเตือน
-      if (!user) {
+      if (!user || user === null) {
         return res.status(400).json({ message: "ข้อมูลล็อกอินไม่ถูกต้อง" });
       } else {
-        // ถ้าจอ user ที่ใช้งาน email ดังกล่าว ให้ตรวจสอบ Password
+        // ถ้าเจอ user ที่ใช้งาน email ดังกล่าว ให้ตรวจสอบ Password
         const isMatch = await bcrypt.compare(password, user.password);
         // ถ้า password ไม่ตรงกัน
         if (!isMatch) {
@@ -60,8 +60,8 @@ router.post(
             secure: process.env.NODE_ENV === "produciton", // รับ-ส่งผ่านทาง HTTPS เท่านั้นถ้าเป็น "produciton"
             maxAge: 86400000, // 86400000 เท่ากับ 1 วัน
           });
-          // แจ้งสถานะภาพว่าทำงานได้ตามปกติและส่ง _id กลับไป
-          // หลังจากล็อกอินเราจะสามารถใช้ _id เพื่อการ Query ข้อมูลต่าง ๆ ที่เกี่ยวข้องกับผู้ใช้งานได้ต่อไป
+          // แจ้งสถานะภาพว่าทำงานได้ตามปกติและส่ง _id และ role กลับไป
+          // หลังจากล็อกอินเราจะสามารถใช้ _id และ role เพื่อการ Query ข้อมูลต่าง ๆ ที่เกี่ยวข้องกับผู้ใช้งานได้ต่อไป
           res.status(200).json({ userId: user._id, userRole: user.role });
         }
       }
@@ -77,17 +77,21 @@ router.post(
 // สร้าง Get End Point "/api/auth/validate-token" เพื่อตรวจสอบ Token ที่ frontend ส่งเข้ามา
 // กำหนด Middleware ด้วยการสร้างฟังก์ชัน verifyToken ซึ่งจะทำการตรวจสอบ Token
 // Arrow Function จะรับ Request, Response จาก Express
-router.get("/validate-token", func.verifyToken, (req: Request, res: Response) => {
-  // ถ้า Token ถูกต้อง ให้แจ้ง Status 200 และส่ง userId และ userRole เพื่อให้ผู้ใช้งานนำไปใช้ประโยชน์ต่อไป
-  res.status(200).send({ userId: req.userId, userRole: req.userRole });
-});
+router.get(
+  "/validate-token",
+  func.verifyToken,
+  (req: Request, res: Response) => {
+    // ถ้า Token ถูกต้อง ให้แจ้ง Status 200 และส่ง userId และ userRole เพื่อให้ผู้ใช้งานนำไปใช้ประโยชน์ต่อไป
+    res.status(200).send({ userId: req.userId, userRole: req.userRole });
+  }
+);
 
 // สร้าง Post End Point "/api/auth/logout"
 router.post("/logout", (req: Request, res: Response) => {
-    // Clear ค่า Cookies ในระบบ
+  // Clear ค่า Cookies ในระบบ
   res.cookie("auth_token", "", {
     // การตั้งค่าวันที่หมดอายุของคุกกี้เป็นเวลาในอดีต คือ January 1, 1970 in UTC ซึ่งหมายความว่าบอกให้เบราว์เซอร์ลบคุกกี้ออกไป
-    expires: new Date(0), 
+    expires: new Date(0),
   });
   res.send(); // ส่งข้อมูลไปยัง frontend
 });

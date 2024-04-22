@@ -2,8 +2,7 @@
 // ที่เราจะพัฒนาในภายหลัง
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Layout from "./layouts/Layout";
-import { SearchBar } from "../src/components";
-import { Home, Register, NotFound, SignIn } from "./pages";
+import { Home, Register, NotFound, SignIn, Enroll, MyHotels, EditHotel, Search, Detail, Booking, MyBookings } from "./pages";
 import { useAppContext } from "./contexts/AppContext";
 import AddHotel from "./pages/AddHotel";
 
@@ -24,7 +23,7 @@ const App = () => {
           path="/search"
           element={
             <Layout>
-              <SearchBar />
+              <Search />
             </Layout>
           }
         />
@@ -44,6 +43,22 @@ const App = () => {
             </Layout>
           }
         />
+        <Route
+          path="/enroll"
+          element={
+            <Layout>
+              <Enroll />
+            </Layout>
+          }
+        />
+        <Route
+          path="/detail/:hotelId"
+          element={
+            <Layout>
+              <Detail />
+            </Layout>
+          }
+        />
         {/* ต้องล็อกอินแล้ว ถึงจะไปยัง Route เหล่านี้ได้ */}
         {isLoggiedIn && (
           <>
@@ -56,27 +71,27 @@ const App = () => {
               }
             />
             <Route
-              path="/my-hotel"
+              path="/edit-hotel/:hotelId"
               element={
                 <Layout>
-                  <div>นี่คือ My Hotels</div>
+                  <EditHotel />
                 </Layout>
               }
             />
             <Route
-              path="/my-booking"
+              path="/hotel/:hotelId/booking"
               element={
                 <Layout>
-                  <div>นี่คือ My Bookings</div>
+                  <Booking />
                 </Layout>
               }
             />
           </>
         )}
-        {/* ต้องล็อกอินแล้วและมีสิทธิ์เป็นผู้ดูแลระบบขึ้นไป ถึงจะไปยัง Route เหล่านี้ได้ */}
+        {/* ต้องล็อกอินแล้วและมีสิทธิ์ที่กำหนด ถึงจะไปยัง Route เหล่านี้ได้ */}
         {isLoggiedIn &&
           userInfo &&
-          ["admin", "superadmin"].some((element) =>
+          ["superadmin"].some((element) =>
             userInfo.userRole.includes(element)
           ) && (
             <>
@@ -85,6 +100,47 @@ const App = () => {
                 element={
                   <Layout>
                     <div>นี่คือ My Dashboard</div>
+                  </Layout>
+                }
+              />
+            </>
+          )}
+        {isLoggiedIn &&
+          userInfo &&
+          ["admin"].some((element) =>
+            userInfo.userRole.includes(element)
+          ) && (
+            <>
+              <Route
+                path="/my-hotel"
+                element={
+                  <Layout>
+                    <MyHotels />
+                  </Layout>
+                }
+              />
+              {/* เนื่องจากคู่ค้าอาจเป็นผู้จองที่พักได้เหมือนกัน */}
+              <Route
+                path="/my-booking"
+                element={
+                  <Layout>
+                    <MyBookings />
+                  </Layout>
+                }
+              />
+            </>
+          )}
+        {isLoggiedIn &&
+          userInfo &&
+          ["user"].some((element) =>
+            userInfo.userRole.includes(element)
+          ) && (
+            <>
+              <Route
+                path="/my-booking"
+                element={
+                  <Layout>
+                    <MyBookings />
                   </Layout>
                 }
               />

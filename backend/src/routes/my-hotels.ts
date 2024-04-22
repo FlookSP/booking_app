@@ -124,7 +124,7 @@ router.post(
 // โดยจะคืนค่าเป็น Array ชื่อไฟล์ที่จัดเก็บสำเร็จ ซึ่งสามารถมีสมาชิกได้ 0 ตัวหรือมากกว่า
 router.post(
   "/files",
-  IpFilter(trustedIPs,{mode: 'allow'}), // อนุญาตให้เฉพาะ Request ที่มาจากหมายเลข IP ที่กำหนดเท่านั้นสามารถลบข้อมูลได้
+  IpFilter(trustedIPs, { mode: 'allow' }), // อนุญาตให้เฉพาะ Request ที่มาจากหมายเลข IP ที่กำหนดเท่านั้นสามารเพิ่มข้อมูลได้
   upload.array("file"), // อนุญาตให้อับโหลดไฟล์ได้ไม่จำกัดจำนวนไฟล์
   (req: Request, res: Response) => {
     // upload.array("file") จะเป็นฟังก์ชันที่ทำหน้าที่อับโหลดไฟล์
@@ -173,7 +173,7 @@ router.get(
 // รองรับการดึงไฟล์เฉพาะตามชื่อไฟล์ เพื่อแสดงภาพโดยใช้ Grid FS
 router.get(
   "/file/:filename",
-  func.verifyToken, // อนุญาตให้เฉพาะผู้ที่ล็อกอินแล้วเท่านั้นสามารถเรียกดูข้อมูลได้
+  IpFilter(trustedIPs, { mode: 'allow' }), // อนุญาตให้เฉพาะ Request ที่มาจากหมายเลข IP ที่กำหนดเท่านั้นสามารถเรียกดูข้อมูลได้
   (req: Request, res: Response) => {
     // ทำการค้นหาไฟล์โดยดูจากชื่อไฟล์
     gfs
@@ -197,7 +197,7 @@ router.get(
 // สร้าง Delete End Point "/api/my-hotels/file/:filename" รองรับการลบไฟล์ในระบบฐานข้อมูลด้วยชื่อไฟล์
 router.delete(
   "/file/:filename",
-  IpFilter(trustedIPs,{mode: 'allow'}), // อนุญาตให้เฉพาะ Request ที่มาจากหมายเลข IP ที่กำหนดเท่านั้นสามารถเพิ่มข้อมูลได้
+  IpFilter(trustedIPs, { mode: 'allow' }), // อนุญาตให้เฉพาะไอพีที่กำหนดเท่านั้นสามารถเรียกดูข้อมูลได้
   (req: Request, res: Response) => {
     // ทำการค้นหาไฟล์โดยดูจากชื่อไฟล์
     gfs
@@ -262,7 +262,7 @@ router.post(
       .withMessage("จำเป็นต้องระบุสิ่งอำนวยความสะดวกในที่พัก"),
   ],
   hotelUpload.array("imageFiles", 6), // รับข้อมูลไฟล์มาเก็บไว้ในหน่วยความจำ ชื่อต้องตรงกับชื่อฟีลข้อมูลที่ส่งไฟล์มา
-  async (req: Request, res: Response) => {  
+  async (req: Request, res: Response) => {
     let imageUrls;
     try {
       // ไฟล์ที่อับโหลด
@@ -319,7 +319,7 @@ async function uploadImages(imageFiles: Express.Multer.File[]) {
       "file",
       blob,
       `image_${Date.now()}${Path.extname(file.originalname)}` // เนื่องจาก Multer Memory Storage ไม่ลองรับการตั้งค่าชื่อไฟล์เป็นภาษาไทย ดังนั้น เราจึงใช้วิธีการตั้งชื่อแบบสุ่มแทน
-    ); 
+    );
   });
   // เรียกใช้งาน Post End Point "/api/my-hotels/files"
   const response = await fetch("http://localhost:8080/api/my-hotels/files", {
@@ -332,5 +332,131 @@ async function uploadImages(imageFiles: Express.Multer.File[]) {
     );
   return response; // ส่งชื่อไฟล์กลับไป
 }
+
+// สร้าง Get End Point "/api/my-hotels" รองรับการแสดงรายการที่พัก
+router.get("/", func.verifyToken, async (req: Request, res: Response) => {
+  try {
+    // เรียกดูข้อมูลที่พักของ userId ที่ล็อกอินเข้ามา
+    const hotels = await Hotel.find({ userId: req.userId });
+    // ส่งข้อมูลที่พักกลับไปให้ในรูป JSON
+    res.json(hotels);
+  }
+  catch (error) {
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในระหว่างการเรียกดูข้อมูลที่พัก" });
+  }
+
+});
+
+// สร้าง Get End Point "/api/my-hotels/:id" รองรับการแสดงรายละเอียดที่พักตามหมายเลข id ของที่พัก
+router.get("/:id", func.verifyToken, async (req: Request, res: Response) => {
+  // รับหมายเลข id ของที่พักจาก URL
+  const id = req.params.id.toString();
+  try {
+    // เรียกดูข้อมูลที่พักตามหมายเลข id ของที่พักและถูกสร้างขึ้นมาด้วย userId ที่ล็อกอินเข้ามาเท่านั้น
+    // โดย findOne จะคืนค่าเป็น Single Object ไม่ใช่ Array ไปให้ Frontend 
+    const hotels = await Hotel.findOne({ _id: id, userId: req.userId });
+    // ส่งข้อมูลที่พักกลับไปให้ในรูป JSON
+    res.json(hotels);
+  }
+  catch (error) {
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในระหว่างการเรียกดูข้อมูลที่พัก" });
+  }
+});
+
+// สร้าง Put End Point "/api/my-hotels/:id" รองรับการแก้ไขที่พักตามหมายเลข id ของที่พัก
+router.put("/:id",
+  func.verifyToken,
+  hotelUpload.array("imageFiles", 6), // รับข้อมูลไฟล์มาเก็บไว้ในหน่วยความจำ ชื่อต้องตรงกับชื่อฟีลข้อมูลที่ส่งไฟล์มา
+  async (req: Request, res: Response) => {
+    try {
+      // รับข้อมูลที่กรอกใหม่ในแบบฟอร์ม
+      const updatedHotel: HotelType = req.body;
+      // ระบุเวลาที่แก้ไขข้อมูลที่พัก
+      updatedHotel.lastUpdated = new Date();
+
+      // ทำการปรับปรุงข้อมูลที่พัก
+      const hotel = await Hotel.findOneAndUpdate(
+        {
+          _id: req.params.id,
+          userId: req.userId,
+        },
+        // นำข้อมูลที่พักของเดิมในฐานข้อมูลมารวมกันกับของใหม่ที่กรอกเข้ามา
+        updatedHotel,
+        { new: true }
+      );
+      // ถ้าไม่พบข้อมูลที่พักตาม id และ userId ดังกล่าวให้แจ้งเตือนผู้ใช้
+      if (!hotel) {
+        return res.status(404).json({ message: "ไม่พบข้อมูลที่พัก" });
+      }
+
+      // imageFiles คือ ไฟล์ที่ผู้ใช้งานอับโหลดเพิ่มเข้ามาใหม่ สำหรับ updatedHotel.imageUrls คือ ไฟล์รูปภาพของเดิมที่มีอยู่แล้ว
+      const imageFiles = req.files as Express.Multer.File[];
+
+      // ทำการอับโหลดรูปภาพก่อน แล้วจัดเก็บ filename ของรูปเหล่านั้น
+      const imageUrls = await uploadImages(imageFiles);
+      // แปลง Object รูปภาพที่อับโหลดเป็น Array ของชื่อรูปภาพ
+      let existingImageURL: string[] = [];
+      // ถ้ามีการอับโหลดไฟล์เข้ามาใหม่ด้วย
+      if (imageFiles.length > 0) {
+        // แปลง value เช่น ['1713134773249-image_1713134773223.jpg,1713134773273-image_1713134773224.jpg']
+        const value = Object.values(imageUrls)
+        // เป็น ['1713134773249-image_1713134773223.jpg','1713134773273-image_1713134773224.jpg']
+        existingImageURL = String(value).split(',');
+      }
+
+      hotel.imageUrls = [
+        ...existingImageURL, // เก็บข้อมูลชื่อไฟล์รูปภาพที่อับโหลดมาใน hotel.imageUrls Array นี้ โดย ... จะทำการจัดการสมาชิกใน existingImageURL Array ให้โดยอัตโนมัติ
+        ...(updatedHotel.imageUrls || []), // ใส่ข้อมูล URL รูปภาพเดิมที่มีอยู่แล้วหรือถ้าลบหมดก็เป็น Empty Array
+      ];
+
+      await hotel.save();
+      // แจ้งผู้ใช้งานว่าปรับปรุงข้อมูลสำเร็จ
+      res.status(201).json(hotel);
+
+    }
+    catch (error) {
+      res.status(500).json({ message: "เกิดข้อผิดพลาดบางอย่าง" });
+    }
+  }
+);
+
+// สร้าง Delete End Point "/api/my-hotels/:id" รองรับการลบที่พักตามหมายเลข id ของที่พัก
+router.delete(
+  "/:id",
+  func.verifyToken,
+  async (req: Request, res: Response) => {
+    // รับหมายเลข id ของที่พักจาก URL
+    const id = req.params.id.toString();
+    try {
+      const hotels = await Hotel.findOne({ _id: id, userId: req.userId });
+
+      // ลบรูปภาพก่อน
+      if (hotels) {
+        hotels.imageUrls.forEach(async (filename: string) => {
+          // เรียกใช้งาน Delete End Point "/api/my-hotels/file/:filename"
+          await fetch(`http://localhost:8080/api/my-hotels/file/${filename}`, {
+            method: "DELETE",
+          });
+          // ถ้ามาถึงตรงนี้ แสดงว่าลบไฟล์สำเร็จ
+          console.log("ไฟล์รูปที่ลบจากฐานข้อมูลได้สำเร็จ ได้แก่ ", filename);
+        });
+      }
+      else {
+        return res.status(404).json({ message: "ไม่พบข้อมูลที่พัก" });
+      }
+      // ลบข้อมูลที่พัก
+      await Hotel.findByIdAndDelete(id);
+      console.log("ลบที่พักจากฐานข้อมูลได้สำเร็จ")
+      // ทำการแจ้งผู้ใช้งาน
+      res
+        .status(200)
+        .json({ message: "ลบข้อมูลสำเร็จ" });
+
+    }
+    catch (error) {
+      res.status(500).json({ message: "เกิดข้อผิดพลาดในระหว่างการลบข้อมูลที่พัก" });
+    }
+  }
+);
 
 export default router;

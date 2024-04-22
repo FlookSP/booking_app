@@ -6,12 +6,14 @@ import mongoose from "mongoose";
 import userRoutes from "./routes/users";
 import authRoutes from "./routes/auth";
 import hotelRoutes from "./routes/my-hotels";
+import hotelSearchRoutes from "./routes/hotels";
 import cookieParser from "cookie-parser";
+import bookingRoutes from "./routes/my-bookings";
 import path from 'path';
 
 // ทำการเชื่อมต่อกับ MongoDB โดยอาศัย URI ที่กำหนดใน MONGODB_CONNECTION_STRING
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING as string);
-//.then(()=>console.log("เชื่อมต่อกับฐานข้อมูล:", process.env.MONGODB_CONNECTION_STRING));
+//  .then(() => console.log("เชื่อมต่อกับฐานข้อมูล:", process.env.MONGODB_CONNECTION_STRING));
 
 // สร้าง Express App
 const app = express();
@@ -39,9 +41,13 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 // ถ้ามี Request มาที่ "/api/my-hotels" endpoint ให้เรียกใช้งาน Routes ต่าง ๆ ที่กำหนดใน hotelRoutes
 app.use("/api/my-hotels", hotelRoutes);
+// ถ้ามี Request มาที่ "/api/hotels" endpoint ให้เรียกใช้งาน Routes ต่าง ๆ ที่กำหนดใน hotelSearchRoutes
+app.use("/api/hotels", hotelSearchRoutes);
+// ถ้ามี Request มาที่ "/api/my-bookings" ให้เรียกใช้งาน Routes ต่าง ๆ ที่กำหนดใน bookingRoutes
+app.use("/api/my-bookings", bookingRoutes);
 
 // ถ้ามี Request อื่น ๆ ให้เรียกใช้งาน index.html
-app.get("*", (req: Request, res: Response)=>{
+app.get("*", (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
 });
 
