@@ -14,6 +14,13 @@ import HotelTypesFilter from "./HotelTypesFilter";
 import FacilitiesFilter from "./FacilitiesFilter";
 import PriceFilter from "./PriceFilter";
 import BookingDetailsSummary from "./BookingDetailsSummary";
+import HelpSearch from "./HelpSearch";
+import FAQ from "./FAQ";
+import Contact from "./Contact";
+import AboutVision from "./AboutVision";
+import Team from "./Team";
+import Timeline from "./Timeline";
+import AboutCTA from "./AboutCTA";
 
 export {
     Header,
@@ -32,4 +39,11 @@ export {
     FacilitiesFilter,
     PriceFilter,
     BookingDetailsSummary,
+    HelpSearch,
+    FAQ,
+    Contact,
+    AboutVision,
+    Team,
+    Timeline,
+    AboutCTA,
 };

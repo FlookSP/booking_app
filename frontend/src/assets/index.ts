@@ -15,8 +15,14 @@ import eatting from "./man-eating-noodles.jpg";
 import smile from "./smiling-businessman.jpg";
 import dot from "./dots-pattern.svg";
 import discussing from "./man-woman-discussing.jpg";
+import girl_working_laptop from "./girl-working-on-laptop.jpg";
+import team_faq from "./team.jpg";
+import work from "./work.jpg";
+import success from "./success.jpg";
+import bg from "./bg.webp"
+import gmail from "./gmail.avif"
 
-export{
+export {
     booking_app,
     facebook,
     instagram,
@@ -34,4 +40,10 @@ export{
     smile,
     dot,
     discussing,
+    girl_working_laptop,
+    team_faq,
+    work,
+    success,
+    bg,
+    gmail,
 };

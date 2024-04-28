@@ -47,16 +47,16 @@ const MyBookings = () => {
                         {hotel.bookings.map((booking) => (
                             <div>
                                 <div>
-                                    <span className="font-bold mr-2">Dates: </span>
+                                    <span className="font-bold mr-2">วันที่เข้าพัก: </span>
                                     <span>
                                         {new Date(booking.checkIn).toDateString()} -
                                         {new Date(booking.checkOut).toDateString()}
                                     </span>
                                 </div>
                                 <div>
-                                    <span className="font-bold mr-2">Guests:</span>
+                                    <span className="font-bold mr-2">จำนวนผู้เข้าพัก:</span>
                                     <span>
-                                        {booking.adultCount} adults, {booking.childCount} children
+                                        {booking.adultCount} ผู้ใหญ่, {booking.childCount} เด็ก
                                     </span>
                                 </div>
                             </div>

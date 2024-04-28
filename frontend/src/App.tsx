@@ -2,7 +2,7 @@
 // ที่เราจะพัฒนาในภายหลัง
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Layout from "./layouts/Layout";
-import { Home, Register, NotFound, SignIn, Enroll, MyHotels, EditHotel, Search, Detail, Booking, MyBookings } from "./pages";
+import { Home, Register, NotFound, SignIn, Enroll, MyHotels, EditHotel, Search, Detail, Booking, MyBookings, Help, Feature, About } from "./pages";
 import { useAppContext } from "./contexts/AppContext";
 import AddHotel from "./pages/AddHotel";
 
@@ -56,6 +56,30 @@ const App = () => {
           element={
             <Layout>
               <Detail />
+            </Layout>
+          }
+        />
+        <Route
+          path="/help"
+          element={
+            <Layout>
+              <Help />
+            </Layout>
+          }
+        />
+        <Route
+          path="/feature"
+          element={
+            <Layout>
+              <Feature />
+            </Layout>
+          }
+        />
+        <Route
+          path="/company"
+          element={
+            <Layout>
+              <About />
             </Layout>
           }
         />

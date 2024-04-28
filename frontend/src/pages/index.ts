@@ -9,6 +9,9 @@ import Search from "./Search";
 import Detail from "./Detail";
 import Booking from "./Booking";
 import MyBookings from "./MyBookings";
+import Help from "./Help";
+import Feature from "./Feature";
+import About from "./About"
 
 export {
     Home,
@@ -22,4 +25,7 @@ export {
     Detail,
     Booking,
     MyBookings,
+    Help,
+    Feature,
+    About
 };
