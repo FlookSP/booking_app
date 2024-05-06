@@ -2,7 +2,7 @@
 // ที่เราจะพัฒนาในภายหลัง
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Layout from "./layouts/Layout";
-import { Home, Register, NotFound, SignIn, Enroll, MyHotels, EditHotel, Search, Detail, Booking, MyBookings, Help, Feature, About } from "./pages";
+import { Home, Register, NotFound, SignIn, Enroll, MyHotels, EditHotel, Search, Detail, Booking, MyBookings, Help, Feature, About, ForgetPassword, ResetPassword } from "./pages";
 import { useAppContext } from "./contexts/AppContext";
 import AddHotel from "./pages/AddHotel";
 
@@ -80,6 +80,22 @@ const App = () => {
           element={
             <Layout>
               <About />
+            </Layout>
+          }
+        />
+        <Route
+          path="/forget-password"
+          element={
+            <Layout>
+              <ForgetPassword />
+            </Layout>
+          }
+        />
+        <Route
+          path="/reset-password/:token"
+          element={
+            <Layout>
+              <ResetPassword />
             </Layout>
           }
         />

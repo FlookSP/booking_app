@@ -41,14 +41,14 @@ const SignIn = () => {
         message: "เข้าสู่ระบบสำเร็จ!",
         type: "SUCCESS",
       });
-      // ให้ทำเครื่องหมายข้อมูลที่มี Key เป็น "validateToken" และ "validateRole" ว่าล้าสมัยหรือเก่าแล้วด้วย invalidateQueries
+      // ให้ทำเครื่องหมายข้อมูลที่มี Key เป็น "validateToken", "validateRole" รวมถึง query key อื่น ๆ เช่น "fetchCurrentUser" เป็นต้น ว่าล้าสมัยหรือเก่าแล้วด้วย invalidateQueries
       // และทาง frontend จะทำการตรวจสอบกับทาง backend อีกครั้ง 
-      // ซึ่งผลที่ได้คือมันจะยังคงเป็น Token เดิม และบังคับให้มีการ Refresh UI ซึ่งจะทำให้แสดงเมนูใหม่ตามสิทธิ์ได้ถูกต้อง
-      await queryClient.invalidateQueries("validateToken");
+      // ซึ่งผลที่ได้ เช่น มันจะยังคงเป็น Token เดิม เป็นต้น และบังคับให้มีการ Refresh UI ซึ่งจะทำให้แสดงเมนูใหม่ตามสิทธิ์ได้ถูกต้อง
+      await queryClient.invalidateQueries();
       // เมื่อผู้ใช้งานทำการ Log In ได้สำเร็จ โปรแกรมจะทำการไปยังหน้าที่กำหนด
       // ตรวจสอบว่ามีการกำหนดค่าใน location.state? หรือไม่ ถ้าใช่ ให้ navigate ไปยัง from?.pathname หรือหน้าเดิมก่อนล็อกอิน ซึ่งจะมีปุ่มให้จองที่พักได้ขึ้นมาแทน 
-      // แต่ถ้าไม่ใช่ให้ไปหน้า Home แทน
-      navigate(location.state?.from?.pathname || "/");
+      // แต่ถ้าไม่ใช่ให้ไปหน้าที่กำหนดแทน
+      navigate(location.state?.from?.pathname || "/dashboard");
     },
     // ถ้ามีข้อผิดพลาดเกิดขึ้นให้แสดงข้อความา Error ที่เกิดขึ้น
     // ในฟังก์ชัน register เรากำหนดให้ทำการ throw new Error(responseBody.message)
@@ -149,6 +149,7 @@ const SignIn = () => {
               <button
                 type="submit"
                 className="w-full bg-blue-800 py-3 text-center text-white hover:bg-blue-700 text-xl"
+
               >
                 ดำเนินการเข้าสู่ระบบ
               </button>

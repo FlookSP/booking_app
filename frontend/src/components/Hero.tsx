@@ -58,7 +58,7 @@ const Hero = () => {
             </p>
           </div>
 
-          <div className="relative grid grid-cols-2 gap-6 mt-10 md:mt-0">
+          <div className="relative grid grid-cols-2 gap-6 mt-10 md:mt-0 ">
             <div className="overflow-hidden aspect-w-3 aspect-h-4">
               <img
                 className="object-cover object-top origin-top scale-150"

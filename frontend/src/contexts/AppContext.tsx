@@ -30,7 +30,7 @@ type AppContext = {
     // Log In State สำหรับตรวจสอบว่ามีการล็อกอินเข้ามาแล้วหรือยัง
     isLoggiedIn: boolean;
     // ตัวแปรแบบ Global State สำหรับตรวจสอบรายละเอียดผู้ใช้งาน
-    userInfo: userInfo,
+    userInfo: userInfo;
     // รหัส Publishable key ในการติดต่อกับ Stripe
     stripePromise: Promise<Stripe | null>;
 };

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAppContext } from "../contexts/AppContext";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import * as apiClient from "../api-client";
 import { close, menu } from "../assets";
 import { useState } from "react";
@@ -40,13 +40,24 @@ const Header = () => {
   // ตรวจสอบว่ามีการ เปิด/ปิด รายการเมนู Hamberger Menu หรือไม่ และกำหนดค่าเริ่มต้นเป็น
   const [toggle, setToggle] = useState(false);
 
+  // ตัวแปรตรวจสอบการเปิด/ปิดเมนู บัญชีผู้ใช้
+  const [dropdown, setDropdown] = useState(false);
+
+  // เรียกข้อมูลผู้ใช้งานมาเก็บในตัวแปร data แล้วเปลี่ยนชื่อเป็น currentUser
+  const { data: currentUser } = useQuery(
+    "fetchCurrentUser",
+    apiClient.fetchCurrentUser, {
+    retry: false,
+  }
+  );
+
   return (
-    <>
-      <nav className="bg-[#FCF8F1] bg-opacity-30">
+    <> {/* sticky top-0 z-10 คือ กำหนดให้เมนู Header จะแสดงอยู่คงที่ด้านบนเมื่อเลื่อนหน้าจอ และแสดงอยู่เหนือ Component อื่น ๆ  */}
+      <nav className="bg-white bg-opacity-90 sticky top-0 z-10 ">
         <div className="px-4 mx-auto sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
             <span className="text-2xl text-gray-800 font-bold tracking-tight">
-              <Link to="/">ThaiVacationHub.com</Link>
+              {isLoggiedIn ? (<><Link to="/dashboard">ThaiVacationHub.com</Link></>) : (<><Link to="/">ThaiVacationHub.com</Link></>)}
             </span>
 
             <div className=" hidden lg:flex lg:items-center lg:justify-center lg:space-x-10">
@@ -86,81 +97,257 @@ const Header = () => {
                 ความช่วยเหลือ{" "}
               </Link>
 
-              {isLoggiedIn &&
-                userInfo &&
-                ["user"].some((element) =>
-                  userInfo.userRole.includes(element)
-                ) && (
-                  <Link
-                    to="/my-booking"
-                    onClick={() => {
-                      setToggle((prev) => !prev);
-                    }} // เรียกใช้งานฟังก์ชัน handleClick
-                    className="text-base text-black transition-all duration-200 hover:text-opacity-80"
-                  >
-                    {" "}
-                    การจองของฉัน{" "}
-                  </Link>
-                )}
-
-              {isLoggiedIn &&
-                userInfo &&
-                ["admin"].some((element) =>
-                  userInfo.userRole.includes(element)
-                ) && (
-                  <><Link
-                    to="/my-booking"
-                    onClick={() => {
-                      setToggle((prev) => !prev);
-                    }} // เรียกใช้งานฟังก์ชัน handleClick
-                    className="text-base text-black transition-all duration-200 hover:text-opacity-80"
-                  >
-                    {" "}
-                    การจองของฉัน{" "}
-                  </Link>
-                    <Link
-                      to="/my-hotel"
-                      onClick={() => {
-                        setToggle((prev) => !prev);
-                      }} // เรียกใช้งานฟังก์ชัน handleClick
-                      className="text-base text-black transition-all duration-200 hover:text-opacity-80"
-                    >
-                      {" "}
-                      ที่พักของฉัน{" "}
-                    </Link>
-                  </>
-
-                )}
             </div>
 
-            {/* ถ้ายังไม่มีการล็อกอิน */}
+            {/* เมนูขวามือสุด ถ้ายังไม่มีการล็อกอิน */}
             {!isLoggiedIn && (
-              <Link
-                to="/sign-in"
-                title=""
-                className="hidden lg:inline-flex items-center justify-center px-5 py-2.5 text-base transition-all duration-200 hover:bg-yellow-300 hover:text-black focus:text-black focus:bg-yellow-300 font-semibold text-white bg-blue-700 rounded-full w-fit"
-                role="button"
-              >
-                {" "}
-                เข้าสู่ระบบ{" "}
-              </Link>
+              //<!-- component -->
+              <div className="max-lg:hidden flex justify-center">
+                <div className="relative inline-block">
+                  {/* Dropdown toggle button */}
+                  <button
+                    className="relative z-10 flex items-center p-2 text-sm text-white bg-blue-700 rounded-md border border-transparent hover:bg-blue-600 "
+                    onClick={() => {
+                      setDropdown((prev) => !prev);
+                    }}
+
+                  >
+                    <span className="mx-1 text-base text-white transition-all duration-200 hover:text-opacity-80 ">บัญชีผู้ใช้</span>
+                    <svg className="w-5 h-5 mx-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 15.713L18.01 9.70299L16.597 8.28799L12 12.888L7.40399 8.28799L5.98999 9.70199L12 15.713Z" fill="currentColor"></path>
+                    </svg>
+                  </button>
+
+                  {/* Dropdown menu */}
+                  <div className={`absolute right-0 z-20 w-56 py-2 mt-2 overflow-hidden bg-white rounded-md shadow-xl dark:bg-gray-800 ${dropdown ? "" : "hidden"} `}>
+                    <Link
+                      to="/sign-in"
+                      className="block px-4 py-3 text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                      onClick={() => {
+                        setDropdown((prev) => !prev);
+                      }}>
+                      เข้าสู่ระบบ
+                    </Link>
+                    <Link
+                      to="/register"
+                      className="block px-4 py-3 text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                      onClick={() => {
+                        setDropdown((prev) => !prev);
+                      }}>
+                      สมัครสมาชิก
+                    </Link>
+
+                    <hr className="border-gray-200 dark:border-gray-700 " />
+
+                    <Link
+                      to="/forget-password"
+                      className="block px-4 py-3 text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                      onClick={() => {
+                        setDropdown((prev) => !prev);
+                      }}>
+                      ลืมรหัสผ่าน?
+                    </Link>
+                  </div>
+                </div>
+              </div>
             )}
 
-            {isLoggiedIn && (
-              <Link
-                to="/sign-out"
-                onClick={handleClick} // เรียกใช้งานฟังก์ชัน handleClick
-                className="hidden lg:inline-flex items-center justify-center px-5 py-2.5 text-base transition-all duration-200 hover:bg-yellow-300 hover:text-black focus:text-black focus:bg-yellow-300 font-semibold text-white bg-blue-700 rounded-full w-fit"
-                role="button"
-              >
-                {" "}
-                ออกจากระบบ{" "}
-              </Link>
-            )}
+            {/* เมนูขวามือสุด ถ้ามีการล็อกอินแล้ว และสิทธิ์ user */}
+            {isLoggiedIn && currentUser &&
+              userInfo &&
+              ["user"].some((element) =>
+                userInfo.userRole.includes(element)
+              ) && (
+                //<!-- component -->
+                <div className="max-lg:hidden justify-center">
+                  <div className="relative inline-block">
+                    {/*<!-- Dropdown toggle button -->*/}
+                    <button
+                      className="relative z-10 flex items-center p-2 text-sm text-white bg-blue-700 rounded-md border border-transparent hover:bg-blue-600 "
+                      onClick={() => {
+                        setDropdown((prev) => !prev);
+                      }}
+                    >
+                      <span className="mx-1 text-base text-white transition-all duration-200 hover:text-opacity-80 ">สวัสดี, {currentUser.email.split('@')[0]}</span>
+                      <svg className="w-5 h-5 mx-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 15.713L18.01 9.70299L16.597 8.28799L12 12.888L7.40399 8.28799L5.98999 9.70199L12 15.713Z" fill="currentColor"></path>
+                      </svg>
+                    </button>
+
+                    {/*<!-- Dropdown menu -->*/}
+                    <div className={`absolute right-0 z-20 w-56 py-2 mt-2 overflow-hidden bg-white rounded-md shadow-xl dark:bg-gray-800 ${dropdown ? "" : "hidden"} `}>
+                      <strong className="block p-2 text-xs font-medium uppercase text-gray-400"> จัดการบัญชีของคุณ </strong>
+                      <Link
+                        to="/dashboard"
+                        className="block px-4 py-3 text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                        onClick={() => {
+                          setDropdown((prev) => !prev);
+                        }}>
+                        แดชบอร์ด
+                      </Link>
+                      <Link
+                        to="/my-profile"
+                        className="block px-4 py-3 text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                        onClick={() => {
+                          setDropdown((prev) => !prev);
+                        }}>
+                        ข้อมูลส่วนตัว
+                      </Link>
+
+                      <Link
+                        to="/reset-password"
+                        className="block px-4 py-3 text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                        onClick={() => {
+                          setDropdown((prev) => !prev);
+                        }}>
+                        เปลี่ยนรหัสผ่าน
+                      </Link>
+
+                      <hr className="border-gray-200 dark:border-gray-700 " />
+                      <label className="block p-2 text-xs font-medium uppercase text-gray-400"> จัดการเกี่ยวกับการจองที่พัก </label>
+
+                      <Link
+                        to="/my-booking"
+                        className="block px-4 py-3 text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                        onClick={() => {
+                          setDropdown((prev) => !prev);
+                        }}>
+                        การจองของฉัน
+                      </Link>
+
+                      <hr className="border-gray-200 dark:border-gray-700 " />
+                      <label className="block p-2 text-xs font-medium uppercase text-gray-400"> จัดการบทความ </label>
+
+                      <Link
+                        to="/my-post"
+                        className="block px-4 py-3 text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                        onClick={() => {
+                          setDropdown((prev) => !prev);
+                        }}>
+                        บทความของฉัน
+                      </Link>
+
+                      <hr className="border-gray-200 dark:border-gray-700 " />
+
+                      <Link
+                        to="/sign-out"
+                        className="block px-4 py-3 text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                        onClick={() => {
+                          setDropdown((prev) => !prev);
+                          handleClick(); // ทำการล็อกเอ้าท์
+                        }}
+                      >
+                        ออกจากระบบ
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+            {/* ถ้ามีการล็อกอินแล้ว และสิทธิ์ admin */}
+            {isLoggiedIn && currentUser &&
+              userInfo &&
+              ["admin"].some((element) =>
+                userInfo.userRole.includes(element)
+              ) && (
+                //<!-- component -->
+                <div className="max-lg:hidden flex justify-center">
+                  <div className="relative inline-block">
+                    {/*<!-- Dropdown toggle button -->*/}
+                    <button
+                      className="relative z-10 flex items-center p-2 text-sm text-white bg-blue-700 rounded-md border border-transparent hover:bg-blue-600 "
+                      onClick={() => {
+                        setDropdown((prev) => !prev);
+                      }}
+
+                    >
+                      <span className="mx-1 text-base text-white transition-all duration-200 hover:text-opacity-80 ">สวัสดี, {currentUser.email.split('@')[0]}</span>
+                      <svg className="w-5 h-5 mx-1 " viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 15.713L18.01 9.70299L16.597 8.28799L12 12.888L7.40399 8.28799L5.98999 9.70199L12 15.713Z" fill="currentColor"></path>
+                      </svg>
+                    </button>
+
+                    {/*<!-- Dropdown menu -->*/}
+                    <div className={`absolute right-0 z-20 w-56 py-2 mt-2 overflow-hidden bg-white rounded-md shadow-xl dark:bg-gray-800 ${dropdown ? "" : "hidden"} `}>
+                      <strong className="block p-2 text-xs font-medium uppercase text-gray-400"> จัดการบัญชีของคุณ </strong>
+                      <Link
+                        to="/dashboard"
+                        className="block px-4 py-3 text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                        onClick={() => {
+                          setDropdown((prev) => !prev);
+                        }}>
+                        แดชบอร์ด
+                      </Link>
+                      <Link
+                        to="/my-profile"
+                        className="block px-4 py-3 text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                        onClick={() => {
+                          setDropdown((prev) => !prev);
+                        }}>
+                        ข้อมูลส่วนตัว
+                      </Link>
+
+                      <Link
+                        to="/reset-password"
+                        className="block px-4 py-3 text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                        onClick={() => {
+                          setDropdown((prev) => !prev);
+                        }}>
+                        เปลี่ยนรหัสผ่าน
+                      </Link>
+
+                      <hr className="border-gray-200 dark:border-gray-700 " />
+                      <strong className="block p-2 text-xs font-medium uppercase text-gray-400"> จัดการเกี่ยวกับการจองที่พัก </strong>
+                      <Link
+                        to="/my-booking"
+                        className="block px-4 py-3 text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                        onClick={() => {
+                          setDropdown((prev) => !prev);
+                        }}>
+                        การจองของฉัน
+                      </Link>
+
+                      <Link
+                        to="/my-hotel"
+                        className="block px-4 py-3 text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                        onClick={() => {
+                          setDropdown((prev) => !prev);
+                        }}>
+                        ที่พักของฉัน
+                      </Link>
+
+                      <hr className="border-gray-200 dark:border-gray-700 " />
+                      <label className="block p-2 text-xs font-medium uppercase text-gray-400"> จัดการบทความ </label>
+
+                      <Link
+                        to="/my-post"
+                        className="block px-4 py-3 text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                        onClick={() => {
+                          setDropdown((prev) => !prev);
+                        }}>
+                        บทความของฉัน
+                      </Link>
+
+                      <hr className="border-gray-200 dark:border-gray-700 " />
+
+                      <Link
+                        to="/sign-out"
+                        className="block px-4 py-3 text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                        onClick={() => {
+                          setDropdown((prev) => !prev);
+                          handleClick(); // ทำการล็อกเอ้าท์
+                        }}
+                      >
+                        ออกจากระบบ
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
 
             {/* กรณีเป็น Mobile Device */}
             <img
-              className=" bg-gray-300 inline-flex p-2 text-black transition-all duration-200 rounded-md lg:hidden focus:bg-gray-400 hover:bg-gray-400 w-[28px] h-[28px] object-contain"
+              className="lg:hidden bg-gray-300 inline-flex p-2 text-black transition-all duration-200 rounded-md lg:hidden focus:bg-gray-400 hover:bg-gray-400 w-[28px] h-[28px] object-contain"
               onClick={() => setToggle((prev) => !prev)}
               src={toggle ? close : menu}
             ></img>
@@ -170,6 +357,8 @@ const Header = () => {
                 }
                 `}
             >
+              <label className="text-base text-gray-500 uppercase dark:text-gray-500">เนื้อหาเว็บไซต์</label>
+
               <Link
                 to="/company"
                 title=""
@@ -210,21 +399,68 @@ const Header = () => {
                 ความช่วยเหลือ{" "}
               </Link>
 
+              {isLoggiedIn && (<>
+                <hr className="border-gray-200 dark:border-gray-700 " />
+                <label className="text-base text-gray-500 uppercase dark:text-gray-500">จัดการบัญชีของคุณ</label>
+                <Link
+                  to="/dashboard"
+                  className="text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                  onClick={() => {
+                    setToggle((prev) => !prev);
+                  }}>
+                  แดชบอร์ด
+                </Link>
+                <Link
+                  to="/my-profile"
+                  className="text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                  onClick={() => {
+                    setToggle((prev) => !prev);
+                  }}>
+                  ข้อมูลส่วนตัว
+                </Link>
+
+                <Link
+                  to="/reset-password"
+                  className="text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                  onClick={() => {
+                    setToggle((prev) => !prev);
+                  }}>
+                  เปลี่ยนรหัสผ่าน
+                </Link>
+              </>)}
+
               {isLoggiedIn &&
                 userInfo &&
                 ["user"].some((element) =>
                   userInfo.userRole.includes(element)
                 ) && (
-                  <Link
-                    to="/my-booking"
-                    onClick={() => {
-                      setToggle((prev) => !prev);
-                    }} // เรียกใช้งานฟังก์ชัน handleClick
-                    className="text-base text-black transition-all duration-200 hover:text-opacity-80"
-                  >
-                    {" "}
-                    การจองของฉัน{" "}
-                  </Link>
+                  <>
+                    <hr className="border-gray-200 dark:border-gray-700 " />
+                    <label className="text-base text-gray-500 uppercase dark:text-gray-500">จัดการเกี่ยวกับการจองที่พัก</label>
+                    <Link
+                      to="/my-booking"
+                      onClick={() => {
+                        setToggle((prev) => !prev);
+                      }}
+                      className="text-base text-black transition-all duration-200 hover:text-opacity-80 "
+                    >
+                      {" "}
+                      การจองของฉัน{" "}
+                    </Link>
+
+                    <hr className="border-gray-200 dark:border-gray-700 " />
+                    <label className="text-base text-gray-500 uppercase dark:text-gray-500"> จัดการบทความ </label>
+
+                    <Link
+                      to="/my-post"
+                      className="text-base text-black transition-all duration-200 hover:text-opacity-80"
+                      onClick={() => {
+                        setToggle((prev) => !prev);
+                      }}>
+                      บทความของฉัน
+                    </Link>
+                  </>
+
                 )}
 
               {isLoggiedIn &&
@@ -232,16 +468,19 @@ const Header = () => {
                 ["admin"].some((element) =>
                   userInfo.userRole.includes(element)
                 ) && (
-                  <><Link
-                    to="/my-booking"
-                    onClick={() => {
-                      setToggle((prev) => !prev);
-                    }} // เรียกใช้งานฟังก์ชัน handleClick
-                    className="text-base text-black transition-all duration-200 hover:text-opacity-80"
-                  >
-                    {" "}
-                    การจองของฉัน{" "}
-                  </Link>
+                  <>
+                    <hr className="border-gray-200 dark:border-gray-700 " />
+                    <label className="text-base text-gray-500 uppercase dark:text-gray-500">จัดการเกี่ยวกับการจองที่พัก</label>
+                    <Link
+                      to="/my-booking"
+                      onClick={() => {
+                        setToggle((prev) => !prev);
+                      }} // เรียกใช้งานฟังก์ชัน handleClick
+                      className="text-base text-black transition-all duration-200 hover:text-opacity-80"
+                    >
+                      {" "}
+                      การจองของฉัน{" "}
+                    </Link>
                     <Link
                       to="/my-hotel"
                       onClick={() => {
@@ -252,35 +491,70 @@ const Header = () => {
                       {" "}
                       ที่พักของฉัน{" "}
                     </Link>
+                    <hr className="border-gray-200 dark:border-gray-700 " />
+                    <label className="text-base text-gray-500 uppercase dark:text-gray-500"> จัดการบทความ </label>
+
+                    <Link
+                      to="/my-post"
+                      className="text-base text-black transition-all duration-200 hover:text-opacity-80"
+                      onClick={() => {
+                        setToggle((prev) => !prev);
+                      }}>
+                      บทความของฉัน
+                    </Link>
                   </>
                 )}
 
               {/* ถ้ายังไม่มีการล็อกอิน */}
               {!isLoggiedIn && (
-                <Link
-                  to="/sign-in"
-                  title=""
-                  className=" items-center justify-center px-5 py-2.5 text-base transition-all duration-200 hover:bg-yellow-300 hover:text-black focus:text-black focus:bg-yellow-300 font-semibold text-white bg-blue-700 rounded-full w-fit"
-                  role="button"
-                  onClick={() => setToggle((prev) => !prev)}
-                >
-                  {" "}
-                  เข้าสู่ระบบ{" "}
-                </Link>
+                <>
+                  <hr className="border-gray-200 dark:border-gray-700 " />
+                  <label className="text-base text-gray-500 uppercase dark:text-gray-500">บัญชีผู้ใช้</label>
+                  <Link
+                    to="/sign-in"
+                    className="text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                    onClick={() => {
+                      setToggle((prev) => !prev);
+                    }}>
+                    เข้าสู่ระบบ
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                    onClick={() => {
+                      setToggle((prev) => !prev);
+                    }}>
+                    สมัครสมาชิก
+                  </Link>
+
+                  <hr className="border-gray-200 dark:border-gray-700 " />
+
+                  <Link
+                    to="/forget-password"
+                    className="text-base text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                    onClick={() => {
+                      setToggle((prev) => !prev);
+                    }}>
+                    ลืมรหัสผ่าน?
+                  </Link>
+                </>
               )}
               {isLoggiedIn && (
-                <Link
-                  to="/sign-out"
-                  onClick={() => {
-                    setToggle((prev) => !prev);
-                    handleClick();
-                  }} // เรียกใช้งานฟังก์ชัน handleClick
-                  className="items-center justify-center px-5 py-2.5 text-base transition-all duration-200 hover:bg-yellow-300 hover:text-black focus:text-black focus:bg-yellow-300 font-semibold text-white bg-blue-700 rounded-full w-fit"
-                  role="button"
-                >
-                  {" "}
-                  ออกจากระบบ{" "}
-                </Link>
+                <>
+                  <hr className="border-gray-200 dark:border-gray-700 " />
+
+                  <Link
+                    to="/sign-out"
+                    className="text-base text-black transition-all duration-200 hover:text-opacity-80"
+                    onClick={() => {
+                      setToggle((prev) => !prev);
+                      handleClick(); // ทำการล็อกเอ้าท์
+                    }}
+                  >
+                    ออกจากระบบ
+                  </Link>
+
+                </>
               )}
             </div>
           </div>

@@ -1,5 +1,7 @@
 import { HotelType } from "./forms/ManageHotelForm/ManageHotelForm";
+import { ForgetPasswordFormData } from "./pages/ForgetPassword";
 import { RegisterFormData } from "./pages/Register";
+import { ResetPasswordFormData } from "./pages/ResetPassword";
 import { SignInFormData } from "./pages/SignIn";
 
 // ทำการอ่านไฟล์ .env ใน Vite ด้วย import.meta
@@ -337,4 +339,44 @@ export const fetchMyBookings = async (): Promise<HotelType[]> => {
   }
 
   return response.json();
+};
+
+// ฟังก์ชันสำหรับทำงานกับ Post End Point "/api/auth/forget-password" 
+export const fogetPassword = async (formData: ForgetPasswordFormData) => {
+  const response = await fetch(`${API_BASE_URL}/api/auth/forget-password`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json", // บอก Server ว่าข้อความใน body ที่ส่งมาจะอยู่ในรูปแบบ json
+    },
+    body: JSON.stringify(formData), // แปลง formData เป็น json
+  });
+  // นำข้อมูล body ที่รับจาก Server มาเก็บไว้ใน body
+  const body = await response.json();
+  // ถ้ามี Error จาก Server ให้แสดงให้ผู้ใช้งานทราบ
+  if (!response.ok) {
+    if (!(typeof body.message === 'string' || body.message instanceof String)) {
+      throw new Error("ไม่พบชื่อบัญชีผู้ใช้งานดังกล่าว");
+    }
+    throw new Error(body.message);
+  }
+  return body;
+};
+
+// ฟังก์ชันสำหรับทำงานกับ Post End Point "/api/auth/reset-password/:token"
+export const resetPassword = async (formData: ResetPasswordFormData) => {
+  const response = await fetch(
+    `${API_BASE_URL}/api/auth/reset-password/${formData.token}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(formData),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("เกิดข้อผิดพลาดในการแก้ไขรหัสผ่าน");
+  }
 };

@@ -37,7 +37,7 @@ const FAQ = () => {
 
                     <div className="md:px-4 lg:px-10">
                         <img className="rotate-1" src={work} alt="" />
-                        <h3 className="mt-8 text-2xl font-semibold leading-tight text-black">การจัดการบัญชีของคุณ</h3>
+                        <h3 className="mt-8 text-2xl font-semibold leading-tight text-black">จัดการบัญชีของคุณ</h3>
                         <p className="mt-4 text-base text-gray-600">คุณต้องการความช่วยเหลือในการเข้าสู่บัญชีของคุณหรือไม่? ต้องการอัปเดตโปรไฟล์ของคุณหรือแก้ไขบัญชีของคุณหรือไม่? ไม่มีปัญหา! ที่นี่คุณจะพบข้อมูลเกี่ยวกับวิธีการเข้าสู่ระบบบัญชีของคุณ การรีเซ็ตรหัสผ่าน หรือเปลี่ยนที่อยู่อีเมลของคุณ</p>
                         <Link
                             to="#"

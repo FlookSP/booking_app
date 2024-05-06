@@ -12,6 +12,8 @@ import MyBookings from "./MyBookings";
 import Help from "./Help";
 import Feature from "./Feature";
 import About from "./About"
+import ForgetPassword from "./ForgetPassword";
+import ResetPassword from "./ResetPassword";
 
 export {
     Home,
@@ -27,5 +29,7 @@ export {
     MyBookings,
     Help,
     Feature,
-    About
+    About,
+    ForgetPassword,
+    ResetPassword,
 };

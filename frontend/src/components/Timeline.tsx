@@ -18,14 +18,14 @@ const Timeline = () => {
 
                                 <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-slate-300 group-[.is-active]:bg-emerald-500 text-slate-500 group-[.is-active]:text-emerald-50 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
                                     <svg className="fill-current" xmlns="http://www.w3.org/2000/svg" width="12" height="10">
-                                        <path fill-rule="nonzero" d="M10.422 1.257 4.655 7.025 2.553 4.923A.916.916 0 0 0 1.257 6.22l2.75 2.75a.916.916 0 0 0 1.296 0l6.415-6.416a.916.916 0 0 0-1.296-1.296Z" />
+                                        <path fillRule="nonzero" d="M10.422 1.257 4.655 7.025 2.553 4.923A.916.916 0 0 0 1.257 6.22l2.75 2.75a.916.916 0 0 0 1.296 0l6.415-6.416a.916.916 0 0 0-1.296-1.296Z" />
                                     </svg>
                                 </div>
 
                                 <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-slate-200 shadow">
                                     <div className="flex items-center justify-between space-x-2 mb-1">
                                         <div className="font-bold text-slate-900">จุดเริ่มต้น</div>
-                                        <time className="text-xs font-medium text-indigo-500">01/10/2023</time>
+                                        <time className="text-xs font-medium text-indigo-500">01/10/2567</time>
                                     </div>
                                     <div className="text-slate-500">วางแผนพัฒนาการเชื่อมโยงนักท่องเที่ยวเข้ากับเจ้าของที่พักต่าง ๆ โดยเทคโนโลยีต่าง ๆ</div>
                                 </div>
@@ -35,14 +35,14 @@ const Timeline = () => {
 
                                 <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-slate-300 group-[.is-active]:bg-emerald-500 text-slate-500 group-[.is-active]:text-emerald-50 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
                                     <svg className="fill-current" xmlns="http://www.w3.org/2000/svg" width="12" height="10">
-                                        <path fill-rule="nonzero" d="M10.422 1.257 4.655 7.025 2.553 4.923A.916.916 0 0 0 1.257 6.22l2.75 2.75a.916.916 0 0 0 1.296 0l6.415-6.416a.916.916 0 0 0-1.296-1.296Z" />
+                                        <path fillRule="nonzero" d="M10.422 1.257 4.655 7.025 2.553 4.923A.916.916 0 0 0 1.257 6.22l2.75 2.75a.916.916 0 0 0 1.296 0l6.415-6.416a.916.916 0 0 0-1.296-1.296Z" />
                                     </svg>
                                 </div>
 
                                 <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-slate-200 shadow">
                                     <div className="flex items-center justify-between space-x-2 mb-1">
                                         <div className="font-bold text-slate-900">ก่อตั้ง ThaiVacationHub.com </div>
-                                        <time className="text-xs font-medium text-indigo-500">01/11/2023</time>
+                                        <time className="text-xs font-medium text-indigo-500">01/11/2567</time>
                                     </div>
                                     <div className="text-slate-500">ก่อตั้ง ThaiVacationHub.com ขึ้นในกรุงเทพมหานคร ประเทศไทย</div>
                                 </div>
@@ -52,14 +52,14 @@ const Timeline = () => {
 
                                 <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-slate-300 group-[.is-active]:bg-emerald-500 text-slate-500 group-[.is-active]:text-emerald-50 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
                                     <svg className="fill-current" xmlns="http://www.w3.org/2000/svg" width="12" height="10">
-                                        <path fill-rule="nonzero" d="M10.422 1.257 4.655 7.025 2.553 4.923A.916.916 0 0 0 1.257 6.22l2.75 2.75a.916.916 0 0 0 1.296 0l6.415-6.416a.916.916 0 0 0-1.296-1.296Z" />
+                                        <path fillRule="nonzero" d="M10.422 1.257 4.655 7.025 2.553 4.923A.916.916 0 0 0 1.257 6.22l2.75 2.75a.916.916 0 0 0 1.296 0l6.415-6.416a.916.916 0 0 0-1.296-1.296Z" />
                                     </svg>
                                 </div>
 
                                 <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-slate-200 shadow">
                                     <div className="flex items-center justify-between space-x-2 mb-1">
                                         <div className="font-bold text-slate-900">เริ่มต้นพัฒนาแพลตฟอร์ม</div>
-                                        <time className="text-xs font-medium text-indigo-500">01/12/2023</time>
+                                        <time className="text-xs font-medium text-indigo-500">01/12/2567</time>
                                     </div>
                                     <div className="text-slate-500">เริ่มต้นพัฒนา ThaiVacationHub.com เพื่อเป็นแพลตฟอร์มกลางระหว่างเจ้าของที่พักต่าง ๆ กับนักท่องเที่ยวในประเทศไทย</div>
                                 </div>
@@ -69,14 +69,14 @@ const Timeline = () => {
 
                                 <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-slate-300 group-[.is-active]:bg-emerald-500 text-slate-500 group-[.is-active]:text-emerald-50 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
                                     <svg className="fill-current" xmlns="http://www.w3.org/2000/svg" width="12" height="10">
-                                        <path fill-rule="nonzero" d="M10.422 1.257 4.655 7.025 2.553 4.923A.916.916 0 0 0 1.257 6.22l2.75 2.75a.916.916 0 0 0 1.296 0l6.415-6.416a.916.916 0 0 0-1.296-1.296Z" />
+                                        <path fillRule="nonzero" d="M10.422 1.257 4.655 7.025 2.553 4.923A.916.916 0 0 0 1.257 6.22l2.75 2.75a.916.916 0 0 0 1.296 0l6.415-6.416a.916.916 0 0 0-1.296-1.296Z" />
                                     </svg>
                                 </div>
 
                                 <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-slate-200 shadow">
                                     <div className="flex items-center justify-between space-x-2 mb-1">
                                         <div className="font-bold text-slate-900">เริ่มเผยแพร่สู่สาธารณะ</div>
-                                        <time className="text-xs font-medium text-indigo-500">20/01/2024</time>
+                                        <time className="text-xs font-medium text-indigo-500">20/01/2568</time>
                                     </div>
                                     <div className="text-slate-500">เริ่มเผยแพร่แพลตฟอร์มที่อยู่ระหว่างการพัฒนาแก่สาธารณะ โดยค่อย ๆ เพิ่ม Feature สำคัญต่าง ๆ เข้าไปในแพลตฟอร์ม</div>
                                 </div>

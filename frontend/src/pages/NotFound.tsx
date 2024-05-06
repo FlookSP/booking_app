@@ -1,6 +1,11 @@
 import { Link } from "react-router-dom";
+import { useAppContext } from "../contexts/AppContext";
 
 const NotFound = () => {
+  // เรียกใช้งาน Global state ชื่อ AppContext เพื่อตรวจสอบสถานะภาพการล็อกอินในตัวแปรชื่อ isLoggiedIn
+  // และตรวจสอบสิทธิ์ด้วยตัวแปร userInfo
+  const { isLoggiedIn } = useAppContext();
+
   return (
     // กำหนดให้ใช้พื้นที่ทั้งหมดที่มีด้วย h-screen w-screen และสีพื้นหลังเป็นสี gray ความเข้ม 200
     <div className="flex h-screen w-screen bg-gray-200 items-center">
@@ -17,15 +22,28 @@ const NotFound = () => {
           <p className="mb-8">
             แต่อย่ากังวล คุณสามารถค้นหาสิ่งอื่นๆ อีกมากมายได้ในหน้าแรกของเรา.
           </p>
-
-          <span>
-            <Link
-              to="/"
-              className="py-2 px-3 text-[14px] text-blue-700 bg-white outline-blue-700 hover:bg-gray-100 rounded"
-            >
-              หน้าหลัก
-            </Link>
-          </span>
+          {/* แยกเป็นกรณีที่ล็อกอินกับยังไม่ได้ล็อกอินจพ Redirect ไปคนละ Page กัน */}
+          {isLoggiedIn ?
+            (<>
+              <span>
+                <Link
+                  to="/dashboard"
+                  className="py-2 px-3 text-[14px] text-blue-700 bg-white outline-blue-700 hover:bg-gray-100 rounded"
+                >
+                  หน้าหลัก
+                </Link>
+              </span>
+            </>) :
+            (<>
+              <span>
+                <Link
+                  to="/"
+                  className="py-2 px-3 text-[14px] text-blue-700 bg-white outline-blue-700 hover:bg-gray-100 rounded"
+                >
+                  หน้าหลัก
+                </Link>
+              </span>
+            </>)}
         </div>
       </div>
     </div>

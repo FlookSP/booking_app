@@ -157,7 +157,7 @@ const BookingForm = ({ currentUser, paymentIntent }: Props) => {
                     id="payment-element"
                     className="border rounded-md p-2 text-sm"
                 />
-                <div className="text-xs">การจ่ายเงินออนไลน์ของคุณมีความปลอดภัย โดยทางเว็บไซต์ของเราจะไม่เก็บข้อมูลบัตรเครดิตของคุณ แต่จะส่งไปยัง Stripe โดยตรง</div>
+                <p className="text-xs">การจ่ายเงินออนไลน์ของคุณมีความปลอดภัย โดยทางเว็บไซต์ของเราจะไม่มีการเก็บข้อมูลบัตรเครดิตของคุณไว้ แต่จะส่งไปยัง Stripe โดยตรง</p>
             </div>
 
             <div className="flex justify-end">

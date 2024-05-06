@@ -51,7 +51,7 @@ const SearchBar = () => {
     <form
       onSubmit={handleSubmit}
       // Component ในฟอร์มนี้จะถูกแสดงภายในพื้นที่ที่เรากำหนด เช่น bg-blue-100 เป็นต้น
-      className="flex flex-row max-sm:flex-col mb-4 p-6 bg-blue-100 rounded shadow-lg items-center justify-center gap-4"
+      className="flex flex-row max-lg:flex-col mb-4 p-6 bg-blue-100 rounded shadow-lg items-center justify-center gap-4"
     >
       <div className="flex flex-row items-center bg-white p-2 w-full rounded">
         <MdTravelExplore size={25} className="mr-2" />
