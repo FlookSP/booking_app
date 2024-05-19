@@ -115,6 +115,7 @@ const constructSearchQuery = (queryParams: any) => {
             $lte: parseInt(queryParams.maxPrice).toString(), // $lte คือ less than or equal to หรือเอาที่พักที่ราคาต่อคืนน้อยกว่าหรือเท่ากับค่า maxPrice 
         };
     }
+
     // constructedQuery จะคืนค่าในรูปแบบประมาณ { adultCount: { '$gte': 1 }, childCount: { '$gte': 0 } }
     // ซึ่งเป็นรูปแบบที่ MongoDB นำไปทำงานต่อในการค้นหาได้
     return constructedQuery;

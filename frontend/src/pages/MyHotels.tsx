@@ -5,6 +5,9 @@ import { useQuery } from "react-query";
 import { BsBuilding, BsMap } from "react-icons/bs";
 import { BiMoney, BiHotel, BiStar } from "react-icons/bi";
 
+import { useAppContext } from "../contexts/AppContext";
+
+
 const MyHotels = () => {
     // ใช้ useQuery เพื่อเรียกข้อมูลที่พักจาก Backend API ที่กำหนด มาเก็บไว้ในตัวแปรชื่อ data  
     const { data } = useQuery(
@@ -17,10 +20,19 @@ const MyHotels = () => {
         }
     );
 
+    // ทำการเรียกใช้งาน AppContext Global State โดยเรียกใช้งานฟังก์ชัน showModal
+    const { showModal } = useAppContext();
+
     // เมื่อผู้ใช้งานลบที่พัก
     const handleDelete = (id: string) => {
-        apiClient.deleteMyHotelById(id);
-        window.location.reload();
+        showModal({
+            title: "ยืนยันการลบข้อมูลที่พัก",
+            message: "คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้? การดำเนินการนี้ไม่สามารถกู้คืนได้",
+            type: "WARNING",
+            id: id,
+            func: apiClient.deleteMyHotelById,
+        });
+
     };
 
     return (
@@ -76,6 +88,7 @@ const MyHotels = () => {
                                             }}
                                             className="px-5 py-2.5 text-base transition-all duration-200 hover:bg-red-500 hover:text-white focus:text-black focus:bg-yellow-300 font-semibold text-white bg-red-700 rounded w-fit mr-3"
                                         >
+
                                             ลบที่พัก
                                         </Link>
                                         <Link
@@ -85,6 +98,7 @@ const MyHotels = () => {
                                             ดูรายละเอียดเพิ่มเติม
                                         </Link>
                                     </span>
+
                                 </div>
                             </div>
                         })}

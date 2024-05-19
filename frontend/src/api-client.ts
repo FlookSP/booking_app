@@ -1,8 +1,19 @@
-import { HotelType } from "./forms/ManageHotelForm/ManageHotelForm";
-import { ForgetPasswordFormData } from "./pages/ForgetPassword";
-import { RegisterFormData } from "./pages/Register";
-import { ResetPasswordFormData } from "./pages/ResetPassword";
-import { SignInFormData } from "./pages/SignIn";
+import {
+  BookingFormData,
+  CommentFormData,
+  ForgetPasswordFormData,
+  HotelSearchResponse,
+  HotelType,
+  PaymentIntentResponse,
+  PostSearchResponse,
+  PostType,
+  RegisterFormData,
+  ResetPasswordFormData,
+  SearchParams,
+  SearchPostParams,
+  SignInFormData,
+  UserType
+} from "./shared/types";
 
 // ทำการอ่านไฟล์ .env ใน Vite ด้วย import.meta
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
@@ -170,35 +181,6 @@ export const deleteMyHotelById = async (hotelId: string) => {
   return response.json();
 };
 
-// สร้าง SearchParams Type เพื่อช่วยในการตรวจสอบการทำงานของข้อมูลค้นหาหรือค่า Filter ที่จะรับเข้ามา
-export type SearchParams = {
-  // ข้อมูลค้นหาจาก SearchBar Component ที่จะส่งไป Backend
-  // ? คือเป็น optional string
-  destination?: string;
-  checkIn?: string;
-  checkOut?: string;
-  adultCount?: string;
-  childCount?: string;
-  // ข้อมูลหน้าจาก Pagination
-  page?: string;
-  // ข้อมูลค่า Filter 
-  facilities?: string[];
-  types?: string[];
-  stars?: string[];
-  maxPrice?: string;
-  sortOption?: string;
-};
-
-// HotelSearchResponse Type จะให้รายละเอียดเกี่ยวกับ Hotel Search Response ซึ่งต้องตรงกับฝั่ง Backend
-export type HotelSearchResponse = {
-  data: HotelType[];
-  pagination: {
-    total: number;
-    page: number;
-    pages: number;
-  };
-};
-
 // ฟังก์ชันค้นหาข้อมูลที่พัก สำหรับทำงานกับ Get End Point "/api/hotels/search"
 export const searchHotels = async (
   searchParams: SearchParams // รับข้อมูลแบบ SearchParams
@@ -243,15 +225,6 @@ export const fetchHotelById = async (hotelId: string): Promise<HotelType> => {
   return response.json();
 };
 
-// สร้าง UserType Type เพื่อช่วยในการตรวจสอการเรียกดูข้อมูลผู้ใช้งานที่ล็อกอินเข้ามา
-export type UserType = {
-  _id: string;
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-};
-
 // ฟังก์ชันสำหรับเรียกดูข้อมูลผู้ใช้งานที่ล็อกอินเข้ามา สำหรับทำงานกับ Get End Point "/api/users/me"
 export const fetchCurrentUser = async (): Promise<UserType> => {
   const response = await fetch(`${API_BASE_URL}/api/users/me`, {
@@ -262,13 +235,6 @@ export const fetchCurrentUser = async (): Promise<UserType> => {
     throw new Error("เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้");
   }
   return response.json();
-};
-
-// PaymentIntentResponse ให้รายละเอียดเกี่ยวกับ PaymentIntent
-export type PaymentIntentResponse = {
-  paymentIntentId: string;
-  clientSecret: string;
-  totalCost: number;
 };
 
 // ฟังก์ชันสำหรับทำงานกับ Post End Point ชื่อ "/api/hotels/:hotelId/bookings/payment-intent" 
@@ -293,20 +259,6 @@ export const createPaymentIntent = async (
   }
 
   return response.json();
-};
-
-// รายละเอียดของตัวแปรต่าง ๆ ในฟอร์ม BookingFormData นี้
-export type BookingFormData = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  adultCount: number;
-  childCount: number;
-  checkIn: string;
-  checkOut: string;
-  hotelId: string;
-  paymentIntentId: string;
-  totalCost: number;
 };
 
 // ฟังก์ชันสำหรับทำงานกับ Post End Point ชื่อ "/api/hotels/:hotelId/bookings" สำหรับการจัดเก็บข้อมูลการจองที่พัก
@@ -378,5 +330,172 @@ export const resetPassword = async (formData: ResetPasswordFormData) => {
 
   if (!response.ok) {
     throw new Error("เกิดข้อผิดพลาดในการแก้ไขรหัสผ่าน");
+  }
+};
+
+// ฟังก์ชันค้นหาข้อมูลบทความ สำหรับทำงานกับ Get End Point "/api/my-posts/search"
+export const searchPosts = async (
+  searchParams: SearchPostParams // รับข้อมูลแบบ SearchPostParams
+): Promise<PostSearchResponse> => { // Response จะมีรูปแบบเป็น PostSearchResponse
+
+  // สร้างข้อมูลค้นหาโดยอาศัย URLSearchParams 
+  const queryParams = new URLSearchParams();
+  // ข้อมูลค้นหามีค่าเท่ากับ searchParams ที่จะรับเข้ามา หรือ ""
+  queryParams.append("description", searchParams.description || "");
+  queryParams.append("category", searchParams.category || "");
+  queryParams.append("userId", searchParams.userId || "");
+  queryParams.append("page", searchParams.page || "");
+
+  // ส่งข้อมูลค้นหาไปยัง Backend API ที่เกี่ยวข้อง
+  const response = await fetch(`${API_BASE_URL}/api/my-posts/search?${queryParams}`, {
+    method: "GET",
+    credentials: "include", // กำหนดให้ใส่ Cookies ใน Request ที่ส่งไป Backend
+  });
+
+  if (!response.ok) {
+    throw new Error("เกิดข้อผิดพลาดในระหว่างการค้นหาข้อมูลบทความ");
+  }
+
+  // ถ้ามาถึงบรรทัดนี้แสดงว่าทำงานได้ตามปกติ
+  return response.json();
+};
+
+// ฟังก์ชันเรียกดูข้อมูลที่พัก สำหรับทำงานกับ "/api/my-posts/:id"
+// สำหรับ : Promise<PostType[]> หมายถึง กำหนดให้ฟังก์ชันนี้ทำงานกับข้อมูลประเภท PostType ที่เหมือนกัน
+export const fetchMyPosts = async (userId: string): Promise<PostType[]> => {
+  const response = await fetch(`${API_BASE_URL}/api/my-posts/${userId}`, {
+    method: "GET",
+    credentials: "include", // กำหนดให้ใส่ Cookies ใน Request ที่ส่งไป Backend
+  });
+
+  if (!response.ok) {
+    throw new Error("เกิดข้อผิดพลาดในระหว่างการเรียกดูข้อมูลบทความทั้งหมดของผู้โพส");
+  }
+
+  return response.json();
+};
+
+// ฟังก์ชันสำหรับลบข้อมูลบทความ สำหรับทำงานกับ Delete End Point "/api/my-posts/:id" 
+export const deleteMyPostById = async (postId: string) => {
+  const response = await fetch(
+    `${API_BASE_URL}/api/my-posts/${postId}`,
+    {
+      method: "DELETE",
+      credentials: "include",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("เกิดข้อผิดพลาดในระหว่างการลบข้อมูลบทความ");
+  }
+
+  return response.json();
+};
+
+// ฟังก์ชันสำหรับลบรูปภาพ สำหรับทำงานกับ Delete End Point "/api/my-posts/file/:filename"
+export const deleteMyPostImageByName = async (fileName: string) => {
+  const response = await fetch(
+    `${API_BASE_URL}/api/my-posts/file/${fileName}`,
+    {
+      method: "DELETE",
+      credentials: "include",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("เกิดข้อผิดพลาดในระหว่างการลบรูปในบทความ");
+  }
+
+  return response.json();
+};
+
+// ฟังก์ชันเพิ่มข้อมูลบทความ สำหรับทำงานกับ "/api/my-posts/"
+export const addPost = async (postFormData: FormData) => {
+  const response = await fetch(`${API_BASE_URL}/api/my-posts`, {
+    method: "POST",
+    credentials: "include", // กำหนดให้ใส่ Cookies ใน Request ที่ส่งไป Backend
+    body: postFormData,
+  });
+
+  if (!response.ok) {
+    throw new Error("ไม่สามารถเพิ่มข้อมูลบทความได้");
+  }
+
+  return response.json();
+};
+
+// ฟังก์ชันเรียกข้อมูลบทความตามหมายเลขไอดี สำหรับทำงานกับ Get End Point "/api/my-posts/:id"
+export const fetchMyPostById = async (postId: string): Promise<PostType> => {
+  const response = await fetch(`${API_BASE_URL}/api/my-posts/${postId}`, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("เกิดข้อผิดพลาดในระหว่างการเรียกดูข้อมูลบทความ");
+  }
+
+  return response.json();
+};
+
+// ฟังก์ชันแก้ไขข้อมูลบทความตามหมายเลขไอดี สำหรับทำงานกับ Put End Point "/api/my-posts/:id"
+export const updateMyPostById = async (postFormData: FormData) => {
+  const response = await fetch(
+    `${API_BASE_URL}/api/my-posts/${postFormData.get("postId")}`,
+    {
+      method: "PUT",
+      body: postFormData,
+      credentials: "include",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("เกิดข้อผิดพลาดในระหว่างการปรับปรุงข้อมูลบทความ");
+  }
+
+  return response.json();
+};
+
+// ฟังก์ชันเรียกข้อมูลบทความตามหมายเลขไอดี สำหรับทำงานกับ Get End Point "/api/my-posts/:slug"
+export const fetchMyPostBySlug = async (slug: string): Promise<PostType> => {
+  const response = await fetch(`${API_BASE_URL}/api/my-posts/slug/${slug}`, {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    throw new Error("เกิดข้อผิดพลาดในระหว่างการเรียกดูข้อมูลบทความ");
+  }
+
+  return response.json();
+};
+
+// ฟังก์ชันสำหรับเรียกดูข้อมูลผู้เขียนบทความ สำหรับทำงานกับ Get End Point "/api/users/author"
+export const fetchAuthor = async (id: string): Promise<UserType> => {
+  const response = await fetch(`${API_BASE_URL}/api/users/author/${id}`, {
+    method: "GET",
+  });
+  if (!response.ok) {
+    throw new Error("เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้");
+  }
+  return response.json();
+};
+
+// ฟังก์ชันสำหรับทำงานกับ Post End Point ชื่อ "/api/my-comments/:slug" สำหรับการแสดงความคิดเห็นในบทความ
+export const createComment = async (formData: CommentFormData) => {
+  console.log("formData: ", formData.userId);
+  const response = await fetch(
+    `${API_BASE_URL}/api/my-comments/${formData.slug}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(formData),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("เกิดข้อผิดพลาดในการจองห้องพัก");
   }
 };

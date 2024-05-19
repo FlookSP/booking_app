@@ -14,6 +14,8 @@ import Feature from "./Feature";
 import About from "./About"
 import ForgetPassword from "./ForgetPassword";
 import ResetPassword from "./ResetPassword";
+import { HomePostPage, AddPost, EditPost, PostDetail } from "./post";
+import AddHotel from "./AddHotel";
 
 export {
     Home,
@@ -32,4 +34,9 @@ export {
     About,
     ForgetPassword,
     ResetPassword,
+    HomePostPage,
+    AddPost,
+    EditPost,
+    AddHotel,
+    PostDetail,
 };

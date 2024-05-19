@@ -1,8 +1,9 @@
 import React, { useContext, useState } from "react";
-import Toast from "../components/Toast";
+
 import { useQuery } from "react-query";
 import * as apiClient from "../api-client";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
+import { Toast, Modal } from "../components";
 
 // รหัส Publishable key
 const STRIPE_PUB_KEY = import.meta.env.VITE_STRIPE_PUB_KEY || "";
@@ -16,6 +17,15 @@ type ToastMessage = {
 type userInfo = {
     userId: string;
     userRole: string;
+};
+
+// สร้าง type ชื่อ ModalMessage 
+type ModalMessage = {
+    title: string;
+    message: string;
+    type: "INFORMATION" | "WARNING";
+    id: string;
+    func: (id: string) => void; // ฟังก์ชันเรียกใช้งาน API จะรับค่าเป็นไอดีของข้อมูลที่ต้องการดำเนินการ
 };
 
 // สร้าง type ชื่อ AppContext โดยภายในจะระบุฟังก์ชันที่จำเป็นต่อการแสดงกล่องข้อความ
@@ -33,6 +43,8 @@ type AppContext = {
     userInfo: userInfo;
     // รหัส Publishable key ในการติดต่อกับ Stripe
     stripePromise: Promise<Stripe | null>;
+    // ฟังก์ชัน showModal รับค่าประเภท ModalMessage
+    showModal: (modalMessage: ModalMessage) => void;
 };
 
 // การสร้าง Global State ด้วย Context API คือ การที่เราสามารถส่งข้อมูลไปยัง Component 
@@ -66,6 +78,9 @@ export const AppContextProvider = ({
         retry: false,
     });
 
+    // ตัวแปรเก็บค่าการเปิด Modal แสดงกล่องข้อความสอบถาม
+    const [modal, setModal] = useState<ModalMessage | undefined>(undefined);
+
     return ( // ทำการเรียกใช้งานฟังก์ชัน showToast และส่ง Global State อื่น ๆ พร้อมกับแสดง children ไปด้วย 
         <AppContext.Provider value={{
             showToast: (toastMessage) => {
@@ -78,12 +93,26 @@ export const AppContextProvider = ({
             userInfo: data,
             // กำหนดค่าตัวแปร stripePromise
             stripePromise,
+            showModal: (modalMessage) => {
+                // กำหนดค่าตัวแปร toast ด้วยข้อความ toastMessage
+                setModal(modalMessage);
+            },
         }}>{/* ให้แสดง Toast component เมื่อตัวแปร toast ไม่ใช่ undefined */}
             {toast && (
                 <Toast
                     message={toast.message}
                     type={toast.type}
                     onClose={() => setToast(undefined)} // กำหนดให้ตัวแปร toast เป็น undefined จะทำให้ซ่อนกล่องข้อความนี้
+                />
+            )}
+            {modal && (
+                <Modal
+                    title={modal.title}
+                    message={modal.message}
+                    type={modal.type}
+                    id={modal.id}
+                    func={modal.func}
+                    onClose={() => setModal(undefined)} // กำหนดให้ตัวแปร modal เป็น undefined จะทำให้ซ่อนกล่องข้อความนี้
                 />
             )}
             {/* ทำการ Render children เพื่อแสดงผลการทำงานในโปรแกรม */}

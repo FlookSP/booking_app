@@ -1,38 +1,6 @@
 import { AiFillStar } from "react-icons/ai";
 import { Link } from "react-router-dom";
-
-// BookingType จะให้รายละเอียดเกี่ยวกับการจองที่พัก
-export type BookingType = {
-    _id: string;
-    userId: string; // หมายเลขไอดีของผู้ใช้งานที่จองที่พัก
-    firstName: string;
-    lastName: string;
-    email: string;
-    adultCount: number; // จำนวนผู้ใหญ่ที่เข้าพัก
-    childCount: number; // จำนวนเด็กที่เข้าพัก
-    checkIn: Date; // วันที่เข้าพัก
-    checkOut: Date; // วันที่ออกจากที่พัก
-    totalCost: number; // ราคาค่าที่พัก
-};
-
-// HotelType จะให้รายละเอียดเกี่ยวกับที่พัก
-export type HotelType = {
-    _id: string;
-    userId: string; // หมายเลขไอดีของผู้ใช้งานที่ให้รายละเอียดที่พัก
-    name: string; // ชื่อที่พัก
-    city: string; // เมืองที่ตั้งของที่พัก
-    country: string; // ประเทศที่ตั้งของที่พัก
-    description: string; // รายละเอียดของที่พัก
-    type: string; // ประเภทของที่พัก เช่น Hotels, Apartments, Resorts, Villas เป็นต้น
-    adultCount: number; // จำนวนผู้ใหญ่ที่สามารถรับได้
-    childCount: number; // จำนวนเด็กที่สามารถรับได้
-    facilities: string[]; // สิ่งอำนวยความสะดวกในที่พักมีได้หลายรายการแบบ Array String
-    pricePerNight: number; // ราคาของที่พัก
-    starRating: number; // Rating ของที่พัก สามารถนำมาใช้พัฒนาเป็น Feature แนะนำที่พักหรือการ Filter ที่พักได้
-    imageUrls: string[]; // รูปที่พักแบบ Array String
-    lastUpdated: Date; // วันที่ปรับปรุงข้อมูล
-    bookings: BookingType[]; // รายการจองที่พักที่มีการจองแบบ Array String
-};
+import { HotelType } from "../shared/types";
 
 type Props = {
     hotel: HotelType;

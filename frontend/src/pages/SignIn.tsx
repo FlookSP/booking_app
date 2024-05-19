@@ -4,14 +4,7 @@ import { useForm } from "react-hook-form";
 import { useAppContext } from "../contexts/AppContext";
 import { useMutation, useQueryClient } from "react-query";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-
-// เราต้องกำหนด Type ของ Input ต่าง ๆ ใน Log In Form
-// เพื่อให้ useForm ใช้ในการตรวจสอบข้อมูลที่ผู้ใช้งานกรอกเข้ามา
-export type SignInFormData = {
-  email: string;
-  password: string;
-  checked: boolean;
-};
+import { SignInFormData } from "../shared/types";
 
 const SignIn = () => {
   // ใช้งาน useNavigate ในการไปยังหน้า Home Page

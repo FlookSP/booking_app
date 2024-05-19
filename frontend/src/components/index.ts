@@ -21,6 +21,9 @@ import AboutVision from "./AboutVision";
 import Team from "./Team";
 import Timeline from "./Timeline";
 import AboutCTA from "./AboutCTA";
+import Modal from "./Modal";
+import Toast from "./Toast";
+import { PostSearchResultsCard, PostSearchBar, BlogPostCard, BlogCommentCard } from "./post";
 
 export {
     Header,
@@ -46,4 +49,10 @@ export {
     Team,
     Timeline,
     AboutCTA,
+    Modal,
+    Toast,
+    PostSearchResultsCard,
+    PostSearchBar,
+    BlogPostCard,
+    BlogCommentCard,
 };

@@ -9,6 +9,8 @@ import hotelRoutes from "./routes/my-hotels";
 import hotelSearchRoutes from "./routes/hotels";
 import cookieParser from "cookie-parser";
 import bookingRoutes from "./routes/my-bookings";
+import postRoutes from "./routes/my-posts";
+import commentRoutes from "./routes/my-comments";
 import path from 'path';
 
 // ทำการเชื่อมต่อกับ MongoDB โดยอาศัย URI ที่กำหนดใน MONGODB_CONNECTION_STRING
@@ -45,6 +47,10 @@ app.use("/api/my-hotels", hotelRoutes);
 app.use("/api/hotels", hotelSearchRoutes);
 // ถ้ามี Request มาที่ "/api/my-bookings" ให้เรียกใช้งาน Routes ต่าง ๆ ที่กำหนดใน bookingRoutes
 app.use("/api/my-bookings", bookingRoutes);
+// ถ้ามี Request มาที่ "/api/my-posts" ให้เรียกใช้งาน Routes ต่าง ๆ ที่กำหนดใน postRoutes
+app.use("/api/my-posts", postRoutes);
+// ถ้ามี Request มาที่ "/api/my-comments" ให้เรียกใช้งาน Routes ต่าง ๆ ที่กำหนดใน commentRoutes
+app.use("/api/my-comments", commentRoutes);
 
 // ถ้ามี Request อื่น ๆ ให้เรียกใช้งาน index.html
 app.get("*", (req: Request, res: Response) => {

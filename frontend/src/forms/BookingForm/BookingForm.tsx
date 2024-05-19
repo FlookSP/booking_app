@@ -6,39 +6,12 @@ import * as apiClient from "../../api-client";
 import { useParams } from "react-router-dom";
 import { useAppContext } from "../../contexts/AppContext";
 import { useSearchContext } from "../../contexts/SearchContext";
-
-export type UserType = {
-    _id: string;
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-};
-// รายละเอียดของการจอง
-export type PaymentIntentResponse = {
-    paymentIntentId: string;
-    clientSecret: string;
-    totalCost: number;
-};
+import { BookingFormData, PaymentIntentResponse, UserType } from "../../shared/types";
 
 // ระบุรายละเอียด Props ที่ฟอร์มนี้จะรับเข้ามา
 type Props = {
     currentUser: UserType;
     paymentIntent: PaymentIntentResponse;
-};
-
-// รายละเอียดของตัวแปรต่าง ๆ ในฟอร์ม BookingFormData นี้
-export type BookingFormData = {
-    firstName: string;
-    lastName: string;
-    email: string;
-    adultCount: number;
-    childCount: number;
-    checkIn: string;
-    checkOut: string;
-    hotelId: string;
-    paymentIntentId: string;
-    totalCost: number;
 };
 
 const BookingForm = ({ currentUser, paymentIntent }: Props) => {

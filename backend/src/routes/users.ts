@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import User from "../models/user";
 import jwt from "jsonwebtoken";
-import { check, validationResult } from "express-validator";
+import { check, param, validationResult } from "express-validator";
 import func from "../middleware/auth";
 
 // สร้าง Express Router
@@ -95,5 +95,33 @@ router.get("/me", func.verifyToken, async (req: Request, res: Response) => {
     res.status(500).json({ message: "มีข้อผิดพลาดเกิดขึ้น" });
   }
 });
+
+// สร้าง Get End Point "/api/users/me"
+// ฟังก์ชันสำหรับเรียกดูข้อมูลผู้ใช้งานที่ล็อกอินเข้ามาในปัจจุบัน 
+router.get("/author/:id",
+  // ตรวจสอบว่ามีการส่ง id มาให้หรือไม่ พร้อมแจ้งเตือนถ้าไม่มีการส่ง id
+  [param("id").notEmpty().withMessage("จำเป็นต้องระบุรหัส id")],
+  async (req: Request, res: Response) => {
+    // ใช้ validationResult ของ express-validator ในการตรวจสอบความถูกต้องของ Request
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    // รับ id
+    const id = req.params.id.toString();
+
+    try {
+      // select("email") คือ บอกให้ MongoDB ส่ง email ใน Response ที่ตอบกลับไปอย่างเดียว
+      const user = await User.findById(id).select("email");
+      if (!user) {
+        return res.status(400).json({ message: "ไม่พบผู้ใช้งาน" });
+      }
+      res.json(user);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "มีข้อผิดพลาดเกิดขึ้น" });
+    }
+  });
 
 export default router;

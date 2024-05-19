@@ -3,14 +3,7 @@ import { useAppContext } from "../contexts/AppContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation } from "react-query";
 import * as apiClient from "../api-client";
-
-// เราต้องกำหนด Type ของ Input ต่าง ๆ ใน Reset Password Form
-// เพื่อใช้ในการตรวจสอบข้อมูลที่ผู้ใช้งานกรอกเข้ามา
-export type ResetPasswordFormData = {
-    password: string;
-    confirmPassword: string;
-    token: string;
-};
+import { ResetPasswordFormData } from "../shared/types";
 
 const ResetPassword = () => {
     // การรับ token จาก URL จะอาศัย useParams แทนการใช้ Props 

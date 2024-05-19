@@ -2,8 +2,11 @@ import ManageHotelForm from "../forms/ManageHotelForm/ManageHotelForm";
 import { useAppContext } from "../contexts/AppContext";
 import { useMutation } from "react-query";
 import * as apiClient from "../api-client";
+import { useNavigate } from "react-router-dom";
 
 const AddHotel = () => {
+  // ใช้งาน useNavigate ในการไปยังหน้า "/my-hotel"
+  const navigate = useNavigate();
   // ทำการเรียกใช้งาน AppContext Global State โดยเรียกใช้งานฟังก์ชัน showToast
   const { showToast } = useAppContext();
 
@@ -13,6 +16,7 @@ const AddHotel = () => {
   const { mutate, isLoading } = useMutation(apiClient.addHotel, {
     onSuccess: () => {
       showToast({ message: "บันทึกข้อมูลที่พักสำเร็จ!", type: "SUCCESS" });
+      navigate("/my-hotel"); // ไปยังหน้า "/my-hotel" เพื่อดูรายการที่พักที่เพิ่มเข้ามา
     },
     onError: () => {
       showToast({ message: "บันทึกข้อมูลที่พักไม่สำเร็จ", type: "ERROR" });

@@ -56,3 +56,39 @@ export type PaymentIntentResponse = {
   clientSecret: string;
   totalCost: number;
 };
+
+// PostType จะให้รายละเอียดเกี่ยวกับที่พัก
+export type PostType = {
+  _id: string;
+  userId: string; // หมายเลขไอดีของผู้ใช้งาน
+  content: string; // บทความ
+  title: string; // ชื่อบทความต้องไม่ซ้ำกัน
+  imageUrls: string[]; // รูปในบทความ
+  category: string; // ประเภทบทความ
+  slug: string;
+  createdAt: Date;
+  updatedAt: Date;
+  like: string[]; // หมายเลขไอดีของผู้ที่ถูกใจบทความ
+  view: number; // จำนวนผู้เข้าชมบทความนี้
+  comments: CommentType[]; // รายการ comment แบบ Array String
+};
+
+// PostSearchResponse จะให้รายละเอียดเกี่ยวกับ Post Search Response
+export type PostSearchResponse = {
+  data: PostType[];
+  pagination: {
+    total: number;
+    page: number;
+    pages: number;
+  };
+};
+
+// รายละเอียดของ Comment
+export type CommentType = {
+  content: string;
+  userId: string; // หมายเลขไอดีของผู้ที่ทำการ comment
+  like: string[]; // หมายเลขไอดีของผู้ที่ถูกใจ comment
+  numberOfLikes: number; // จำนวนการกดถูกใจ comment
+  createdAt: Date; // วันที่สร้าง comment
+  updatedAt: Date; // วันที่ปรับปรุง comment
+};

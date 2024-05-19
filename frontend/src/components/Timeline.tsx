@@ -27,7 +27,7 @@ const Timeline = () => {
                                         <div className="font-bold text-slate-900">จุดเริ่มต้น</div>
                                         <time className="text-xs font-medium text-indigo-500">01/10/2567</time>
                                     </div>
-                                    <div className="text-slate-500">วางแผนพัฒนาการเชื่อมโยงนักท่องเที่ยวเข้ากับเจ้าของที่พักต่าง ๆ โดยเทคโนโลยีต่าง ๆ</div>
+                                    <div className="text-slate-500">วางแผนพัฒนาการเชื่อมโยงนักท่องเที่ยวเข้ากับเจ้าของที่พักโดยเทคโนโลยีที่ทันสมัย</div>
                                 </div>
                             </div>
 
@@ -61,7 +61,7 @@ const Timeline = () => {
                                         <div className="font-bold text-slate-900">เริ่มต้นพัฒนาแพลตฟอร์ม</div>
                                         <time className="text-xs font-medium text-indigo-500">01/12/2567</time>
                                     </div>
-                                    <div className="text-slate-500">เริ่มต้นพัฒนา ThaiVacationHub.com เพื่อเป็นแพลตฟอร์มกลางระหว่างเจ้าของที่พักต่าง ๆ กับนักท่องเที่ยวในประเทศไทย</div>
+                                    <div className="text-slate-500">เริ่มต้นพัฒนา ThaiVacationHub.com เพื่อเป็นแพลตฟอร์มกลางระหว่างเจ้าของที่พักกับนักท่องเที่ยวในประเทศไทย</div>
                                 </div>
                             </div>
 
@@ -76,7 +76,7 @@ const Timeline = () => {
                                 <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-slate-200 shadow">
                                     <div className="flex items-center justify-between space-x-2 mb-1">
                                         <div className="font-bold text-slate-900">เริ่มเผยแพร่สู่สาธารณะ</div>
-                                        <time className="text-xs font-medium text-indigo-500">20/01/2568</time>
+                                        <time className="text-xs font-medium text-indigo-500">20/01/2567</time>
                                     </div>
                                     <div className="text-slate-500">เริ่มเผยแพร่แพลตฟอร์มที่อยู่ระหว่างการพัฒนาแก่สาธารณะ โดยค่อย ๆ เพิ่ม Feature สำคัญต่าง ๆ เข้าไปในแพลตฟอร์ม</div>
                                 </div>
@@ -96,7 +96,7 @@ const Timeline = () => {
                                         <div className="font-bold text-slate-900">พร้อมสำหรับการให้บริการ</div>
                                         <time className="text-xs font-medium text-amber-500">ภายในมีนาคม พ.ศ.2568</time>
                                     </div>
-                                    <div className="text-slate-500">พัฒนาแพลตฟอร์มได้สมบูรณ์ มี Feature สำคัญต่าง ๆ เพื่อช่วยเหลือให้ผู้ใช้งานได้สัมผัสกับประสบการณ์การท่องเที่ยวที่ดีในประเทศไทย</div>
+                                    <div className="text-slate-500">พัฒนาแพลตฟอร์มได้สมบูรณ์ มี Feature สำคัญที่ช่วยเหลือให้ผู้ใช้งานได้สัมผัสกับประสบการณ์การท่องเที่ยวที่ดีในประเทศไทย</div>
                                 </div>
                             </div>
 

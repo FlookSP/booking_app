@@ -446,7 +446,7 @@ router.delete(
       }
       // ลบข้อมูลที่พัก
       await Hotel.findByIdAndDelete(id);
-      console.log("ลบที่พักจากฐานข้อมูลได้สำเร็จ")
+
       // ทำการแจ้งผู้ใช้งาน
       res
         .status(200)

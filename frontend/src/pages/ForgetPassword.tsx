@@ -4,12 +4,7 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 // เรียกใช้งานฟังก์ชันทั้งหมดในไฟล์ api-client.ts ด้วยชื่อ apiClient
 import * as apiClient from "../api-client";
-
-// เราต้องกำหนด Type ของ Input ต่าง ๆ ใน Log In Form
-// เพื่อให้ useForm ใช้ในการตรวจสอบข้อมูลที่ผู้ใช้งานกรอกเข้ามา
-export type ForgetPasswordFormData = {
-    email: string;
-};
+import { ForgetPasswordFormData } from "../shared/types";
 
 const ForgetPassword = () => {
     // ทำการเรียกใช้งาน AppContext Global State โดยเรียกใช้งานฟังก์ชัน showToast
@@ -67,7 +62,7 @@ const ForgetPassword = () => {
                         <input
                             type="email"
                             className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
-                            placeholder="กรอกอีเมล์"
+                            placeholder="กรอกอีเมลที่ลงทะเบียนไว้กับเรา"
                             // กำหนดต้องกรอกข้อมูลในช่องนี้ และระบุข้อความแจ้งเตือน
                             {...register("email", {
                                 required: "ต้องระบุข้อมูลในช่องนี้",

@@ -5,18 +5,7 @@ import * as apiClient from "../api-client";
 import { useAppContext } from "../contexts/AppContext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-
-// เราต้องกำหนด Type ของ Input ต่าง ๆ ใน Register Form
-// เพื่อให้ useForm ใช้ในการตรวจสอบข้อมูลที่ผู้ใช้งานกรอกเข้ามา
-export type RegisterFormData = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  checked: boolean;
-  role: string; // role สำหรับผู้ใช้งาน
-};
+import { RegisterFormData } from "../shared/types";
 
 const Register = () => {
   // ใช้งาน useNavigate ในการไปยังหน้า Home Page

@@ -10,8 +10,6 @@ const Search = () => {
     // SearchContext จะเก็บข้อมูลค้นหาที่ผู้ใช้งานระบุ
     const search = useSearchContext();
 
-    // สร้างตัวแปรเก็บหมายเลขหน้าที่แสดง โดยค่า Default เท่ากับ 1
-    //const [page, setPage] = useState<number>(1);
     // สร้างตัวแปรเก็บค่า Filter ต่าง ๆ ที่ผู้ใช้งานเลือก
     const [selectedStars, setSelectedStars] = useState<string[]>([]);
     const [selectedHotelTypes, setSelectedHotelTypes] = useState<string[]>([]);

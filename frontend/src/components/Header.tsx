@@ -19,10 +19,11 @@ const Header = () => {
   // useMutation จะใช้งานฟังก์ชัน signOut ในไฟล์ api-client.ts
   const mutation = useMutation(apiClient.signOut, {
     onSuccess: async () => {
-      // หากทำการติดต่อกับ backend สำเร็จ ให้ทำเครื่องหมายข้อมูลที่มี Key เป็น "validateToken" ว่าล้าสมัยหรือเก่าแล้วด้วย invalidateQueries
+      // หากทำการติดต่อกับ backend สำเร็จ ให้ทำเครื่องหมายข้อมูลที่มี Key เป็น "validateToken" และอื่น ๆ ว่าล้าสมัยหรือเก่าแล้วด้วย invalidateQueries
       // จากนั้น react-query หลังจากที่ทำการปรับปรุงข้อมูล Token ที่มีใน Browser เป็นข้อมูล Token ใหม่ที่ได้รับจาก backend แล้ว
       // ซึ่งในที่นี้คือ การลบค่า Token เก่าออกไปนั่นเอง (apiClient.signOut) และมันจะทำการ Refresh UI เพื่อแสดงเมนูอย่างเหมาะสม
-      await queryClient.invalidateQueries("validateToken");
+      await queryClient.invalidateQueries("");
+      sessionStorage.clear(); // ทำการลบ Session Data ที่มีอยู่ออกให้หมด
       showToast({ message: "ออกจากระบบเรียบร้อยแล้ว", type: "SUCCESS" });
       // โปรแกรมจะทำการไปยังหน้า Home Page
       navigate("/");
@@ -60,11 +61,11 @@ const Header = () => {
               {isLoggiedIn ? (<><Link to="/dashboard">ThaiVacationHub.com</Link></>) : (<><Link to="/">ThaiVacationHub.com</Link></>)}
             </span>
 
-            <div className=" hidden lg:flex lg:items-center lg:justify-center lg:space-x-10">
+            <div className=" hidden lg:flex lg:items-center lg:justify-center lg:space-x-10 ">
               <Link
                 to="/company"
                 title=""
-                className="text-base text-black transition-all duration-200 hover:text-opacity-80"
+                className="text-base text-black transition-all duration-200 hover:text-opacity-80 " // hover:underline decoration-yellow-300 focus:underline decoration-yellow-300
               >
                 {" "}
                 เกี่ยวกับเรา{" "}
@@ -73,8 +74,9 @@ const Header = () => {
               <Link
                 to="/search" // ให้ไปยัง Route "/search"
                 title=""
-                className="text-base text-black transition-all duration-200 hover:text-opacity-80"
+                className="text-base text-black transition-all duration-200 hover:text-opacity-80" // focus:underline decoration-blue-500
               >
+
                 {" "}
                 บริการของเรา{" "}
               </Link>

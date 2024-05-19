@@ -5,6 +5,7 @@ import TypeSection from "./TypeSection";
 import FacilitiesSection from "./FacilitiesSection";
 import GuestsSection from "./GuestsSection";
 import ImagesSection from "./ImagesSection";
+import { HotelType } from "../../shared/types";
 // ต้องสร้าง Type สำหรับอธิบายคุณสมบัติของฟอร์ม ManageHotelForm ที่เราจะสร้างด้วย React Hook Form (useForm)
 // ในที่นี้ตั้งชื่อ Type ว่า HotelFormData ส่วนใหญ่จะประกอบไปด้วยคุณสมบัติที่คล้ายกับ HotelType ในฝั่ง Backend
 // เรากำหนด Type ของฟอร์มไว้ในไฟล์เดียวกัน ข้อดี คือ การค้นหาเพื่อปรับปรุงแก้ไขในภายหลังทำได้ง่าย
@@ -22,37 +23,7 @@ export type HotelFormData = {
   adultCount: number; // จำนวนผู้ใหญ่ที่สามารถรับได้
   childCount: number; // จำนวนเด็กที่สามารถรับได้
 };
-// BookingType จะให้รายละเอียดเกี่ยวกับการจองที่พัก
-export type BookingType = {
-  _id: string;
-  userId: string; // หมายเลขไอดีของผู้ใช้งานที่จองที่พัก
-  firstName: string;
-  lastName: string;
-  email: string;
-  adultCount: number; // จำนวนผู้ใหญ่ที่เข้าพัก
-  childCount: number; // จำนวนเด็กที่เข้าพัก
-  checkIn: Date; // วันที่เข้าพัก
-  checkOut: Date; // วันที่ออกจากที่พัก
-  totalCost: number; // ราคาค่าที่พัก
-};
-// HotelType จะให้รายละเอียดเกี่ยวกับที่พัก
-export type HotelType = {
-  _id: string;
-  userId: string; // หมายเลขไอดีของผู้ใช้งานที่ให้รายละเอียดที่พัก
-  name: string; // ชื่อที่พัก
-  city: string; // เมืองที่ตั้งของที่พัก
-  country: string; // ประเทศที่ตั้งของที่พัก
-  description: string; // รายละเอียดของที่พัก
-  type: string; // ประเภทของที่พัก เช่น Hotels, Apartments, Resorts, Villas เป็นต้น
-  adultCount: number; // จำนวนผู้ใหญ่ที่สามารถรับได้
-  childCount: number; // จำนวนเด็กที่สามารถรับได้
-  facilities: string[]; // สิ่งอำนวยความสะดวกในที่พักมีได้หลายรายการแบบ Array String
-  pricePerNight: number; // ราคาของที่พัก
-  starRating: number; // Rating ของที่พัก สามารถนำมาใช้พัฒนาเป็น Feature แนะนำที่พักหรือการ Filter ที่พักได้
-  imageUrls: string[]; // รูปที่พักแบบ Array String
-  lastUpdated: Date; // วันที่ปรับปรุงข้อมูล
-  bookings: BookingType[]; // รายการจองที่พักที่มีการจองแบบ Array String
-};
+
 // สร้าง Type สำหรับกำหนดว่า Argument ที่ ManageHotelForm Component นี้สามารถรับค่ามาได้นั้น จะเป็นข้อมูลแบบ HotelType
 type Props = {
   hotel?: HotelType; // hotel เป็น Optional Props เพราะเราสามารถส่งค่าผ่านทาง EditHotel.tsx หรือ MyHotels.tsx
@@ -72,10 +43,10 @@ const ManageHotelForm = ({ onSave, isLoading, hotel }: Props) => {
     reset, // ฟังก์ชันจาก React Hook Form สำหรับ Reset ข้อมูลในฟอร์ม
   } = formMethods;
 
-  // ถ้ามีการส่งข้อมูลที่พักมาด้วยผ่านทาง hotel
+  /*// ถ้ามีการส่งข้อมูลที่พักมาด้วยผ่านทาง hotel
   useEffect(() => {
     reset(hotel); // จัดการแสดงข้อมูลที่พักนั้นในแบบฟอร์มนี้ด้วย reset
-  }, [hotel, reset]); // ทำงานใน useEffect นี้เมื่อมีการแก้ไขค่า hotel, reset
+  }, [hotel, reset]); // ทำงานใน useEffect นี้เมื่อมีการแก้ไขค่า hotel, reset*/
 
   // เรากำหนดฟังก์ชันชื่อ onSubmit ใน ManageHotelForm
   // ให้ทำงานร่วมกับฟังก์ชัน handleSubmit ใน react-hook-form

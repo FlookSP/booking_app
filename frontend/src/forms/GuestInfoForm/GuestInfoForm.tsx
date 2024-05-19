@@ -10,7 +10,7 @@ type Props = {
     pricePerNight: number;
 };
 
-// รายละเอียดของตัวแปร่าง ๆ ใน GuestInfoForm
+// รายละเอียดของตัวแปรต่าง ๆ ใน GuestInfoForm
 type GuestInfoFormData = {
     checkIn: Date;
     checkOut: Date;
