@@ -167,6 +167,7 @@ export type PostSearchResponse = {
 export type SearchPostParams = {
     // ข้อมูลค้นหาจาก SearchBar Component ที่จะส่งไป Backend
     // ? คือเป็น optional string
+    id?: string;
     description?: string;
     userId?: string;
     category?: string;

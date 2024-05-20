@@ -205,11 +205,11 @@ const Feature = () => {
                     <div
                         id="slider"
                         className="h-full flex lg:gap-8 md:gap-6 gap-14 items-center justify-start transition ease-out duration-700">
-
                         {posts && posts.data.map((post, index) => (<>
                             <BlogPostCard key={index} post={post} />
                         </>
                         ))}
+
                     </div>
                 </div>
                 {/* ปุ่มเลื่อนขวา */}

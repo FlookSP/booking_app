@@ -23,10 +23,11 @@ const Header = () => {
       // จากนั้น react-query หลังจากที่ทำการปรับปรุงข้อมูล Token ที่มีใน Browser เป็นข้อมูล Token ใหม่ที่ได้รับจาก backend แล้ว
       // ซึ่งในที่นี้คือ การลบค่า Token เก่าออกไปนั่นเอง (apiClient.signOut) และมันจะทำการ Refresh UI เพื่อแสดงเมนูอย่างเหมาะสม
       await queryClient.invalidateQueries("");
-      sessionStorage.clear(); // ทำการลบ Session Data ที่มีอยู่ออกให้หมด
+
       showToast({ message: "ออกจากระบบเรียบร้อยแล้ว", type: "SUCCESS" });
       // โปรแกรมจะทำการไปยังหน้า Home Page
       navigate("/");
+      navigate(0); // บังคับทำ Refresh Component เพื่อแสดงข้อมูลปัจจุบัน
     },
     onError: (error: Error) => {
       showToast({ message: error.message, type: "ERROR" });
