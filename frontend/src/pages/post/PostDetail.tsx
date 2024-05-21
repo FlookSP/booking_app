@@ -231,7 +231,7 @@ const PostDetail = () => {
                             <div title="แชร์บทความทางอีเมล" className="flex px-4 py-2 text-sm text-gray-800 border-b hover:bg-blue-100">
                                 <EmailShareButton
                                     subject={`บทความเรื่อง ${slug}`}
-                                    url={`${API_BASE_URL}/post-detail/${slug}`} // `https://booking-app-ry5k.onrender.com/post-detail/${slug}`
+                                    url={`https://booking-app-ry5k.onrender.com/post-detail/${slug}`}
                                     className="flex flex-row"
                                 >
                                     <EmailIcon size={18} className="mr-4 " />
@@ -241,7 +241,7 @@ const PostDetail = () => {
                             <div title="แชร์กับผู้ใช้งานโปรแกรมไลน์" className="flex px-4 py-2 text-sm text-gray-800 border-b hover:bg-blue-100">
                                 <LineShareButton
                                     title={`บทความเรื่อง ${slug}`}
-                                    url={`${API_BASE_URL}/post-detail/${slug}`} // `https://booking-app-ry5k.onrender.com/post-detail/${slug}`
+                                    url={`https://booking-app-ry5k.onrender.com/post-detail/${slug}`}
                                     className="flex flex-row"
                                 >
                                     <LineIcon size={18} className="mr-4 " />
