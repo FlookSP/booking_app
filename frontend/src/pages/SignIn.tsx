@@ -40,7 +40,7 @@ const SignIn = () => {
       await queryClient.invalidateQueries();
 
       // เมื่อผู้ใช้งานทำการ Log In ได้สำเร็จ โปรแกรมจะทำการไปยังหน้าที่กำหนด
-      // ตรวจสอบว่ามีการกำหนดค่าใน location.state? หรือไม่ ถ้าใช่ ให้ navigate ไปยัง from?.pathname หรือหน้าเดิมก่อนล็อกอิน ซึ่งจะมีปุ่มให้จองที่พักได้ขึ้นมาแทน 
+      // ตรวจสอบว่ามีการกำหนดค่าใน location.state? หรือไม่ ถ้าใช่ ให้ navigate ไปยัง from?.pathname หรือหน้าเดิมก่อนล็อกอิน เช่น จะมีปุ่มให้จองที่พักได้ขึ้นมาแทน 
       // แต่ถ้าไม่ใช่ให้ไปหน้าที่กำหนดแทน
       navigate(location.state?.from?.pathname || "/dashboard");
     },

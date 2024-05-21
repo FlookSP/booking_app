@@ -153,7 +153,7 @@ const constructSearchPostQuery = (queryParams: any) => {
             { content: new RegExp(queryParams.description, "i") },
         ];
     }
-    console.log("searchPostParams: ", constructedQuery)
+
     return constructedQuery;
 };
 
@@ -489,9 +489,18 @@ router.get("/slug/:slug",
 );
 
 // สร้าง Post End Point ชื่อ "/api/my-posts/:slug/increment-view-count"
-router.post(
+router.put(
     "/:slug/increment-view-count",
+    // ตรวจสอบว่ามีการส่ง slug มาให้หรือไม่ พร้อมแจ้งเตือนถ้าไม่มีการส่ง slug
+    [param("slug").notEmpty().withMessage("จำเป็นต้องระบุรหัส slug ของบทความ")],
     async (req: Request, res: Response) => {
+        // ใช้ validationResult ของ express-validator ในการตรวจสอบความถูกต้องของ Request
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
         const slug = req.params.slug.toString();
 
         // เรียกดูข้อมูลบทความตาม slug ของบทความ 
@@ -506,6 +515,43 @@ router.post(
         await post.save();
 
         res.status(200).json({ message: "เพิ่มจำนวนเข้าชมบทความดังกล่าวเรียบร้อยแล้ว" });;
+    }
+);
+
+// สร้าง Post End Point ชื่อ "/api/my-posts/:slug/like-post"
+router.put("/:slug/like-post",
+    func.verifyToken,
+    // ตรวจสอบว่ามีการส่ง slug มาให้หรือไม่ พร้อมแจ้งเตือนถ้าไม่มีการส่ง slug
+    [param("slug").notEmpty().withMessage("จำเป็นต้องระบุรหัส slug ของบทความ")],
+    async (req: Request, res: Response) => {
+        // ใช้ validationResult ของ express-validator ในการตรวจสอบความถูกต้องของ Request
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const slug = req.params.slug.toString();
+
+        // เรียกดูข้อมูลบทความตาม slug ของบทความ 
+        const post = await Post.findOne({ slug: slug });
+        if (!post) {
+            return res.status(400).json({ message: "ไม่พบบทความดังกล่าว" });
+        }
+
+        // ตรวจสอบว่าผู้ใช้งานได้เคยกดไลค์บทความนี้หรือยัง
+        const userIndex = post.like.indexOf(req.userId);
+        // ถ้าไม่พบ userId ใน Array
+        if (userIndex === -1) {
+            post.like.push(req.userId);
+        }
+        else {
+            // เอา userId ใน Array ออก
+            post.like.splice(userIndex, 1);
+        }
+
+        await post.save();
+        res.status(200).json({ message: "กดไลค์บทความดังกล่าวเรียบร้อยแล้ว" });;
     }
 );
 

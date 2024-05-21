@@ -500,12 +500,29 @@ export const createComment = async (formData: CommentFormData) => {
   }
 };
 
-// ฟังก์ชันเพิ่มจำนวนการเข้าชมบทความตาม slug สำหรับทำงานกับ Put End Point "/api/my-posts/:slug/increment-view-count"
+// ฟังก์ชันเพิ่มจำนวนการเข้าชมบทความตาม slug สำหรับทำงานกับ POST End Point "/api/my-posts/:slug/increment-view-count"
 export const incrementMyPostViewBySlug = async (slug: string) => {
   const response = await fetch(
     `${API_BASE_URL}/api/my-posts/${slug}/increment-view-count`,
     {
-      method: "POST",
+      method: "PUT",
+      credentials: "include",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("เกิดข้อผิดพลาดในระหว่างการปรับปรุงจำนวนการเข้าชมบทความ");
+  }
+
+  return response.json();
+};
+
+// ฟังก์ชันกดไลค์บทความตาม slug สำหรับทำงานกับ POST End Point "/api/my-posts/:slug/like-post"
+export const likePostBySlug = async (slug: string) => {
+  const response = await fetch(
+    `${API_BASE_URL}/api/my-posts/${slug}/like-post`,
+    {
+      method: "PUT",
       credentials: "include",
     }
   );

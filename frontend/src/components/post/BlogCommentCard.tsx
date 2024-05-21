@@ -27,7 +27,7 @@ const BlogCommentCard = ({ comment }: Props) => {
                 const user = await apiClient.fetchAuthor(comment?.userId || "");
                 setUser(user.email);
             } catch (e) {
-                console.log(e);
+                console.log("เกิดข้อผิดพลาดในระหว่างการอ่านชื่อผู้ Comment บทความ");
             }
         }
         fetUser();

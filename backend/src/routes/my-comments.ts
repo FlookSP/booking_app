@@ -11,7 +11,7 @@ const router = express.Router();
 router.post(
     "/:slug",
     func.verifyToken,
-    // ตรวจสอบว่ามีการส่ง slug มาให้หรือไม่ พร้อมแจ้งเตือนถ้าไม่มีการส่ง id
+    // ตรวจสอบว่ามีการส่ง slug มาให้หรือไม่ พร้อมแจ้งเตือนถ้าไม่มีการส่ง slug
     [param("slug").notEmpty().withMessage("จำเป็นต้องระบุรหัส slug ของบทความ")],
     async (req: Request, res: Response) => {
         // ใช้ validationResult ของ express-validator ในการตรวจสอบความถูกต้องของ Request
@@ -21,7 +21,7 @@ router.post(
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const slug = req.params.slug;
+        const slug = req.params.slug.toString();
 
         try {
             const post = await Post.findOne({ slug: slug });
