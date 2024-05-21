@@ -26,7 +26,7 @@ const HomePostPage = () => {
         category: category,
     };
 
-    // จะเริ่มต้นทำการค้นหาข้อมูลเมื่อโหลด Page นี้ โดยส่ง searchParams ไปยัง searchPosts เพื่อค้นหาข้อมูล
+    // จะเริ่มต้นทำการค้นหาข้อมูลเมื่อโหลด Page นี้ โดยส่ง searchParams ไปยัง searchPosts เพื่อค้นหาข้อมูล    
     const { data } = useQuery(["searchPosts", searchPostParams], () =>
         apiClient.searchPosts(searchPostParams)
     );

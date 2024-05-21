@@ -139,13 +139,12 @@ router.get("/search", async (req: Request, res: Response) => {
 const constructSearchPostQuery = (queryParams: any) => {
     let constructedQuery: any = {};
 
-
     if (queryParams.userId) {
         constructedQuery = { userId: queryParams.userId };
     }
 
     if (queryParams.category) {
-        constructedQuery = { category: queryParams.category };
+        constructedQuery.category = { $in: queryParams.category };
     }
 
     if (queryParams.description) {
@@ -154,7 +153,7 @@ const constructSearchPostQuery = (queryParams: any) => {
             { content: new RegExp(queryParams.description, "i") },
         ];
     }
-
+    console.log("searchPostParams: ", constructedQuery)
     return constructedQuery;
 };
 
@@ -486,6 +485,27 @@ router.get("/slug/:slug",
             console.log(error);
             res.status(500).json({ message: "เกิดข้อผิดพลาดในระหว่างการค้นหาบทความ" });
         }
+    }
+);
+
+// สร้าง Post End Point ชื่อ "/api/my-posts/:slug/increment-view-count"
+router.post(
+    "/:slug/increment-view-count",
+    async (req: Request, res: Response) => {
+        const slug = req.params.slug.toString();
+
+        // เรียกดูข้อมูลบทความตาม slug ของบทความ 
+        const post = await Post.findOne({ slug: slug });
+        if (!post) {
+            return res.status(400).json({ message: "ไม่พบบทความดังกล่าว" });
+        }
+
+        const currentView = post.view;
+        const newView = currentView + 1;
+        post.view = newView;
+        await post.save();
+
+        res.status(200).json({ message: "เพิ่มจำนวนเข้าชมบทความดังกล่าวเรียบร้อยแล้ว" });;
     }
 );
 

@@ -335,16 +335,16 @@ export const resetPassword = async (formData: ResetPasswordFormData) => {
 
 // ฟังก์ชันค้นหาข้อมูลบทความ สำหรับทำงานกับ Get End Point "/api/my-posts/search"
 export const searchPosts = async (
-  searchParams: SearchPostParams // รับข้อมูลแบบ SearchPostParams
+  searchParams?: SearchPostParams // รับข้อมูลแบบ SearchPostParams
 ): Promise<PostSearchResponse> => { // Response จะมีรูปแบบเป็น PostSearchResponse
 
   // สร้างข้อมูลค้นหาโดยอาศัย URLSearchParams 
   const queryParams = new URLSearchParams();
   // ข้อมูลค้นหามีค่าเท่ากับ searchParams ที่จะรับเข้ามา หรือ ""
-  queryParams.append("description", searchParams.description || "");
-  queryParams.append("category", searchParams.category || "");
-  queryParams.append("userId", searchParams.userId || "");
-  queryParams.append("page", searchParams.page || "");
+  queryParams.append("description", searchParams?.description || "");
+  queryParams.append("category", searchParams?.category || "");
+  queryParams.append("userId", searchParams?.userId || "");
+  queryParams.append("page", searchParams?.page || "");
 
   // ส่งข้อมูลค้นหาไปยัง Backend API ที่เกี่ยวข้อง
   const response = await fetch(`${API_BASE_URL}/api/my-posts/search?${queryParams}`, {
@@ -498,4 +498,21 @@ export const createComment = async (formData: CommentFormData) => {
   if (!response.ok) {
     throw new Error("เกิดข้อผิดพลาดในการจองห้องพัก");
   }
+};
+
+// ฟังก์ชันเพิ่มจำนวนการเข้าชมบทความตาม slug สำหรับทำงานกับ Put End Point "/api/my-posts/:slug/increment-view-count"
+export const incrementMyPostViewBySlug = async (slug: string) => {
+  const response = await fetch(
+    `${API_BASE_URL}/api/my-posts/${slug}/increment-view-count`,
+    {
+      method: "POST",
+      credentials: "include",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("เกิดข้อผิดพลาดในระหว่างการปรับปรุงจำนวนการเข้าชมบทความ");
+  }
+
+  return response.json();
 };
