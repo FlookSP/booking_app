@@ -96,8 +96,8 @@ router.get("/me", func.verifyToken, async (req: Request, res: Response) => {
   }
 });
 
-// สร้าง Get End Point "/api/users/me"
-// ฟังก์ชันสำหรับเรียกดูข้อมูลผู้ใช้งานที่ล็อกอินเข้ามาในปัจจุบัน 
+// สร้าง Get End Point "/api/users/author/:id"
+// ฟังก์ชันสำหรับเรียกดูข้อมูลผู้ใช้งานที่เกี่ยวข้องกับบทความ 
 router.get("/author/:id",
   // ตรวจสอบว่ามีการส่ง id มาให้หรือไม่ พร้อมแจ้งเตือนถ้าไม่มีการส่ง id
   [param("id").notEmpty().withMessage("จำเป็นต้องระบุรหัส id")],

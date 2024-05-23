@@ -6,13 +6,13 @@ import { useMutation, useQuery } from "react-query";
 import { HiThumbUp, HiOutlineChat, HiOutlineShare, HiChevronRight, HiChevronLeft } from 'react-icons/hi';
 import { useEffect, useState } from "react";
 import CommentForm from "../../forms/CommentForm/CommentForm";
-import { BlogPostCard, BlogCommentCard } from "../../components";
+import { BlogPostCard } from "../../components";
 import { useAppContext } from "../../contexts/AppContext";
 import { LineShareButton, LineIcon, EmailShareButton, EmailIcon } from "react-share";
 
 const PostDetail = () => {
     // การรับ slug จาก URL จะอาศัย useParams แทนการใช้ Props 
-    const { slug } = useParams();
+    const { slug: post_slug } = useParams();
 
     // สำหรับตรวจสอบว่าล็อกอินก่อนกดถูกใจ
     const { isLoggiedIn } = useAppContext();
@@ -22,26 +22,17 @@ const PostDetail = () => {
 
     // เพื่อช่วยจำหน้าที่อยู่ในปัจจุบัน
     const location = useLocation();
-
     // ตัวแปรตรวจสอบการเปิด/ปิดปุ่มแชร์บทความ
     const [dropdown, setDropdown] = useState(false);
 
     // อ่านข้อมูลจาก API ที่กำหนด ด้วย useQuery
     const { data: post } = useQuery(
         "fetchMyPostBySlug", // ตั้งชื่อ Query นี้ว่า fetchMyPostBySlug
-        () => apiClient.fetchMyPostBySlug(slug || ""), // เรียกใช้งาน API นี้ โดยถ้าไม่มีข้อมูล slug ส่งมาด้วยให้ส่งค่า "" แทน
+        () => apiClient.fetchMyPostBySlug(post_slug || ""), // เรียกใช้งาน API นี้ โดยถ้าไม่มีข้อมูล post_slug ส่งมาด้วยให้ส่งค่า "" แทน
         {
-            enabled: !!slug, // กำหนดว่าให้ตรวจสอบ slug ว่ามีค่าถูกส่งมาด้วยก่อนจึงจะสามารถทำงานใน fetchMyPostBySlug ได้
+            enabled: !!post_slug, // กำหนดว่าให้ตรวจสอบ post_slug ว่ามีค่าถูกส่งมาด้วยก่อนจึงจะสามารถทำงานใน fetchMyPostBySlug ได้
         }
     );
-
-    /*const { data: user } = useQuery(
-        "fetchAuthor", // ตั้งชื่อ Query นี้ว่า fetchAuthor
-        () => apiClient.fetchAuthor(post?.userId || ""), // เรียกใช้งาน API นี้ โดยถ้าไม่มีข้อมูล slug ส่งมาด้วยให้ส่งค่า "" แทน
-        {
-            enabled: !!post, // กำหนดว่าให้ตรวจสอบ post ว่ามีค่าถูกส่งมาด้วยก่อนจึงจะสามารถทำงานใน fetchAuthor ได้
-        }
-    );*/
 
     // สำหรับบทความที่เกี่ยวข้อง
     const searchPostParams = {
@@ -117,7 +108,7 @@ const PostDetail = () => {
 
     // สำหรับการไลค์ข้อความ
     const onLikePost = () => {
-        slug && mutate(slug);
+        post_slug && mutate(post_slug);
     };
 
     // สำหรับการล็อกอินก่อนไลค์ข้อความ
@@ -152,7 +143,7 @@ const PostDetail = () => {
     useEffect(() => {
         async function incrementViewCount() {
             try {
-                await apiClient.incrementMyPostViewBySlug(slug || "");
+                await apiClient.incrementMyPostViewBySlug(post_slug || "");
 
             } catch (e) {
                 console.log("เกิดข้อผิดพลาดในระหว่างการปรับปรุงจำนวนการเข้าชมบทความ");
@@ -230,8 +221,8 @@ const PostDetail = () => {
                         <div className={`absolute right-0 mt-0 w-48 bg-white rounded-sm overflow-hidden shadow-lg z-20 border border-gray-100 ${dropdown ? "" : "hidden"} `}>
                             <div title="แชร์บทความทางอีเมล" className="flex px-4 py-2 text-sm text-gray-800 border-b hover:bg-blue-100">
                                 <EmailShareButton
-                                    subject={`บทความเรื่อง ${slug}`}
-                                    url={`https://booking-app-ry5k.onrender.com/post-detail/${slug}`}
+                                    subject={`บทความเรื่อง ${post_slug}`}
+                                    url={`https://booking-app-ry5k.onrender.com/post-detail/${post_slug}`}
                                     className="flex flex-row"
                                 >
                                     <EmailIcon size={18} className="mr-4 " />
@@ -240,8 +231,8 @@ const PostDetail = () => {
                             </div>
                             <div title="แชร์กับผู้ใช้งานโปรแกรมไลน์" className="flex px-4 py-2 text-sm text-gray-800 border-b hover:bg-blue-100">
                                 <LineShareButton
-                                    title={`บทความเรื่อง ${slug}`}
-                                    url={`https://booking-app-ry5k.onrender.com/post-detail/${slug}`}
+                                    title={`บทความเรื่อง ${post_slug}`}
+                                    url={`https://booking-app-ry5k.onrender.com/post-detail/${post_slug}`}
                                     className="flex flex-row"
                                 >
                                     <LineIcon size={18} className="mr-4 " />
@@ -282,8 +273,8 @@ const PostDetail = () => {
                 </>))}
             </div>
 
-            {/* แบบฟอร์มรับการแสดงความเห็น */}
-            {slug && <div id="commentId"><CommentForm slug={slug} /></div>}
+            {/* แบบฟอร์มรับการแสดงความเห็น โดยกำหนดว่า commenting เป็น true */}
+            {post_slug && <div id="commentId"><CommentForm slug={post_slug} commenting={true} /></div>}
 
             {/* ส่วนแสดงบทความที่เกี่ยวข้อง */}
             <div className='flex flex-col justify-center items-center mt-3' >
@@ -310,13 +301,13 @@ const PostDetail = () => {
             </div>
 
             {/* ส่วนแสดง Comment */}
-            <div className="max-w-4xl px-10 py-16 mx-auto bg-gray-100  bg-white min-w-screen animation-fade animation-delay  px-0 px-8 mx-auto sm:px-12 xl:px-5">
-
-                <p className="mt-1 text-3xl  text-left text-gray-800 sm:mx-6 sm:text-2xl md:text-3xl lg:text-3xl sm:text-center sm:mx-0">
+            <div className="px-10 py-16 mx-auto bg-gray-100 bg-white animation-fade animation-delay px-0 px-8 mx-auto sm:px-12 xl:px-5">
+                <p className="mt-1 text-3xl text-left text-gray-800 sm:mx-6 sm:text-2xl md:text-3xl lg:text-3xl sm:text-center sm:mx-0">
                     ความเห็นทั้งหมดในโพสต์นี้
                 </p>
                 {(post.comments.length !== 0) ? (post.comments.map((comment, index) => (<>
-                    <BlogCommentCard key={index} comment={comment} />
+                    {/* แบบฟอร์มแสดงรายการความคิดเห็นทั้งหมดในบทความนี้ โดยกำหนด commenting เ็น false เพื่อเลือกแสดงแบบไม่ให้แก้ไขได้ */}
+                    <CommentForm key={index} commented={comment} postId={post._id} commenting={false} slug={post_slug} />
                 </>))) :
                     (<>
                         <div className="flex items-center justify-center rounded-sm p-3 text-black-100 font-light">

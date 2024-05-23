@@ -1,25 +1,21 @@
-//import { useQuery } from "react-query";
 import { CommentType } from "../../shared/types";
 import * as apiClient from "../../api-client";
 import { useEffect, useState } from "react";
+import { useAppContext } from "../../contexts/AppContext";
 
 // ระบุ Props ของ Object ที่ Component นี้จะรับเข้ามา 
 type Props = {
+    postId: string,
     comment: CommentType;
 };
 
-const BlogCommentCard = ({ comment }: Props) => {
-
-    /*const { data: user } = useQuery(
-        "fetchAuthor", // ตั้งชื่อ Query นี้ว่า fetchAuthor
-        () => apiClient.fetchAuthor(comment.userId), // เรียกใช้งาน API นี้ โดยถ้าไม่มีข้อมูล userId ส่งมาด้วยให้ส่งค่า "" แทน
-        {
-            enabled: !!comment, // กำหนดว่าให้ตรวจสอบ comment ว่ามีค่าถูกส่งมาด้วยก่อนจึงจะสามารถทำงานใน fetchAuthor ได้
-        }
-    );*/
+const BlogCommentCard = ({ postId, comment }: Props) => {
 
     // สำหรับตรวจสอบชื่อ ทั้งนี้มี bug ใช้ useQuery ไม่สำเร็จ รอแก้ไข
     const [user, setUser] = useState('');
+
+    // สำหรับตรวจสอบว่าล็อกอินก่อนแก้ไขความคิดเห็น
+    const { isLoggiedIn, userInfo, showToast } = useAppContext();
 
     useEffect(() => {
         async function fetUser() {
@@ -32,6 +28,18 @@ const BlogCommentCard = ({ comment }: Props) => {
         }
         fetUser();
     }, [comment?.userId]);
+
+    // อนุญาตให้ผู้ที่แสดงความคิดเห็นสามารถแก้ไขหรือลบความคิดเห็นได้
+    const handleDelete = async () => {
+        const commentInPost = { postId: postId, commentId: comment._id };
+        try {
+            await apiClient.deleteMyComment(commentInPost);
+            window.location.reload();
+        }
+        catch (e) {
+            showToast({ message: "เกิดข้อผิดพลาดในระหว่างการลบความคิดเห็นในบทความ", type: "ERROR" });
+        }
+    };
 
     const toThaiDateString = (date: Date) => {
         const monthNames = [
@@ -53,15 +61,32 @@ const BlogCommentCard = ({ comment }: Props) => {
     };
 
     return (
-        <div className="flex items-center w-full px-6 py-6 mx-auto mt-10 bg-white border border-gray-200 rounded-lg sm:px-8 md:px-12 sm:py-8 sm:shadow lg:w-5/6 ">
+        <div className="items-center px-3 py-6 mt-10 bg-white border border-gray-200 rounded-lg sm:py-8 sm:shadow overflow-hidden">
+            <h3 className="text-3xl font-semibold text-blue-500 max-sm:text-lg md:text-xl"><b>โดย</b> {"  "}{user}</h3>
+            <p className="text-sm font-semibold text-gray-300"><b>แสดงความคิดเห็นเมื่อ</b> {toThaiDateString(new Date(comment.updatedAt))}</p>
+            <p className="mt-2 text-base text-gray-600 sm:text-lg md:text-normal mb-3">
+                {comment.content}</p>
+            {(isLoggiedIn && comment?.userId === userInfo?.userId) ?
+                (<>
+                    <span className="flex justify-end gap-1">
+                        <button
+                            onClick={handleDelete}
+                            className="p-2 text-sm transition-all duration-200 hover:bg-red-500 hover:text-white focus:text-black focus:bg-yellow-300 font-semibold text-white bg-red-700 rounded w-fit mr-3"
+                        >
 
-            <div className="w-[500px]"><h3 className="text-3xl font-semibold text-blue-500 sm:text-xl md:text-2xl"><b>โดย</b> {"  "}{user}</h3>
-                <p className="text-sm font-semibold text-gray-300"><b>แสดงความคิดเห็นเมื่อ</b> {toThaiDateString(new Date(comment.updatedAt))}</p>
-                <p className="mt-2 text-base text-gray-600 sm:text-lg md:text-normal">
-                    {comment.content}</p>
-            </div>
-
+                            ลบความคิดเห็น
+                        </button>
+                        <button
+                            className="bg-blue-600 text-sm text-white h-full p-2 font-bold max-w-fit hover:bg-blue-500 rounded"
+                        >
+                            แก้ไขความคิดเห็น
+                        </button>
+                    </span>
+                </>) :
+                (<>
+                </>)}
         </div>
+
     )
 }
 

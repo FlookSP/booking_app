@@ -482,7 +482,7 @@ export const fetchAuthor = async (id: string): Promise<UserType> => {
 
 // ฟังก์ชันสำหรับทำงานกับ Post End Point ชื่อ "/api/my-comments/:slug" สำหรับการแสดงความคิดเห็นในบทความ
 export const createComment = async (formData: CommentFormData) => {
-  console.log("formData: ", formData.userId);
+
   const response = await fetch(
     `${API_BASE_URL}/api/my-comments/${formData.slug}`,
     {
@@ -532,4 +532,47 @@ export const likePostBySlug = async (slug: string) => {
   }
 
   return response.json();
+};
+
+type commentInPostData = {
+  postId: string;
+  commentId: string;
+};
+// ฟังก์ชันสำหรับลบความคิดเห็น สำหรับทำงานกับ Delete End Point "/api/my-posts/delete-comment" 
+export const deleteMyComment = async (data: commentInPostData) => {
+  const response = await fetch(`${API_BASE_URL}/api/my-posts/delete-comment`, {
+    method: "POST",
+    credentials: "include", // กำหนดให้ใส่ Cookies ใน Request ที่ส่งไป Backend
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data), // ส่ง postId และ commentId ไปให้ Backend
+  });
+
+  if (!response.ok) {
+    throw new Error("ไม่สามารถลบความคิดเห็นในบทความได้");
+  }
+
+  return response.json();
+};
+
+// ฟังก์ชันสำหรับทำงานกับ Put End Point ชื่อ "/api/my-comments/edit-comment" สำหรับการแสดงความคิดเห็นในบทความ
+export const editComment = async (formData: CommentFormData) => {
+
+  const response = await fetch(
+    `${API_BASE_URL}/api/my-comments/edit-comment`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(formData),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("เกิดข้อผิดพลาดในการจองห้องพัก");
+  }
 };

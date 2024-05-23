@@ -551,8 +551,49 @@ router.put("/:slug/like-post",
         }
 
         await post.save();
-        res.status(200).json({ message: "กดไลค์บทความดังกล่าวเรียบร้อยแล้ว" });;
+        res.status(200).json({ message: "กดไลค์บทความดังกล่าวเรียบร้อยแล้ว" });
     }
+);
+
+type commentInPostData = {
+    postId: string;
+    commentId: string;
+};
+
+// สร้าง Post End Point "/api/my-posts/delete-comment" รองรับการลบความคิดเห็นในบทความ
+router.post(
+    "/delete-comment",
+    func.verifyToken, // อนุญาตให้เฉพาะผู้ที่ล็อกอินแล้วเท่านั้นสามารถลบความคิดเห็นในบทความได้
+    // ฟังก์ชันการทำงานของ API นี้
+    async (req: Request, res: Response) => {
+        try {
+            // รับข้อมูลใน Multipart/Form มาเก็บไว้แบบ PostType
+            const commentInPost: commentInPostData = req.body;
+
+            // ทำการหา Post และ Comment และลบเฉพาะ Comment โดยอาศัย $pull
+            await Post.findByIdAndUpdate(commentInPost.postId,
+                {
+                    $pull: { comments: { _id: commentInPost.commentId } } // ลบเฉพาะ Comment ที่มีหมายเลข commentId
+                },
+            );
+
+            // แจ้งผลว่าทำการบันทึกข้อมูล Post พักสำเร็จ
+            return res.status(200).json({ message: "ลบความคิดเห็นดังกล่าวเรียบร้อยแล้ว" });
+
+        }
+        catch (error) {
+            // แจ้งข้อความ Error ทางฝั่ง Server
+            console.log(
+                "เกิดข้อผิดพลาดใน Post End Point /api/my-posts/delete-comment: ", error
+            );
+        }
+        // ทำการแจ้งผู้ใช้งาน
+        res
+            .status(500)
+            .json({ message: "เกิดข้อผิดพลาดไม่สามารถลบความคิดเห็นดังกล่าวได้" });
+
+    }
+
 );
 
 export default router;

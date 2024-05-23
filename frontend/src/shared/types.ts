@@ -180,4 +180,6 @@ export type CommentFormData = {
     content: string;
     userId: string;
     slug: string;
+    postId?: string;
+    commentId?: string;
 };

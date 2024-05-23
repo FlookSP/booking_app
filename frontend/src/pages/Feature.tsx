@@ -24,12 +24,12 @@ const Feature = () => {
 
     const goNext = () => {
         defaultTransform = defaultTransform - 398;
-        const slider = document.getElementById("slider");
-        if (slider && Math.abs(defaultTransform) >= slider.scrollWidth / 1.7)
+        const sliderNext = document.getElementById("slider");
+        if (sliderNext && Math.abs(defaultTransform) >= sliderNext.scrollWidth / 1.7)
             defaultTransform = 0;
 
-        if (slider) {
-            slider.style.transform = "translateX(" + defaultTransform + "px)";
+        if (sliderNext) {
+            sliderNext.style.transform = "translateX(" + defaultTransform + "px)";
         }
     };
 
@@ -44,12 +44,12 @@ const Feature = () => {
 
     const goNextPopular = () => {
         defaultTransform = defaultTransform - 398;
-        const sliderPopular = document.getElementById("sliderPopular");
-        if (sliderPopular && Math.abs(defaultTransform) >= sliderPopular.scrollWidth / 1.7)
+        const sliderNextPopular = document.getElementById("sliderPopular");
+        if (sliderNextPopular && Math.abs(defaultTransform) >= sliderNextPopular.scrollWidth / 1.7)
             defaultTransform = 0;
 
-        if (sliderPopular) {
-            sliderPopular.style.transform = "translateX(" + defaultTransform + "px)";
+        if (sliderNextPopular) {
+            sliderNextPopular.style.transform = "translateX(" + defaultTransform + "px)";
         }
     };
 
