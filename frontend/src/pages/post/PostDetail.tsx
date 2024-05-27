@@ -80,7 +80,7 @@ const PostDetail = () => {
     const goNext = () => {
         defaultTransform = defaultTransform - 398;
         const slider = document.getElementById("slider");
-        if (slider && Math.abs(defaultTransform) >= slider.scrollWidth / 1.7)
+        if (slider && Math.abs(defaultTransform) >= slider.scrollWidth / 1)
             defaultTransform = 0;
 
         if (slider) {
@@ -166,7 +166,7 @@ const PostDetail = () => {
                 {post && post.title}
             </h1>
             <Link
-                to={`/category/${post && post.category}`}
+                to={`/post-category/${post && post.category}`}
                 className='self-center mt-5 text-xl font-light text-center border border-yellow-300 rounded-full p-3 w-fit bg-yellow-300 '
             >
                 {post && post.category}

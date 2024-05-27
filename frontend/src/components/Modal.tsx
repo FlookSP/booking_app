@@ -1,10 +1,14 @@
+interface MyObjectsInterface {
+    [key: string]: string;
+}
+
 type ModalProps = {
     title: string;
     message: string; // ข้อความ
     type: "INFORMATION" | "WARNING";
     onClose: () => void; // ฟังก์ชันปิด Modal นี้
-    id: string;
-    func: (id: string) => void; // ฟังก์ชันเรียกใช้งาน API ใน Modal นี้ 
+    id: MyObjectsInterface; // ค่า Parameter ที่จะส่งไปยัง Backend
+    func: (id: MyObjectsInterface) => void; // ฟังก์ชันเรียกใช้งาน API ใน Modal นี้โดยส่งค่า id ไปด้วย
 };
 
 const Modal = ({ title, message, type, id, func, onClose }: ModalProps) => {

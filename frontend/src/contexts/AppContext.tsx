@@ -19,13 +19,18 @@ type userInfo = {
     userRole: string;
 };
 
+// สร้าง interface สำหรับระบุลักษณะข้อมูล id ที่ func ของ Modal จะทำงานด้วย
+interface MyObjectsInterface {
+    [key: string]: string;
+}
+
 // สร้าง type ชื่อ ModalMessage 
 type ModalMessage = {
     title: string;
     message: string;
     type: "INFORMATION" | "WARNING";
-    id: string;
-    func: (id: string) => void; // ฟังก์ชันเรียกใช้งาน API จะรับค่าเป็นไอดีของข้อมูลที่ต้องการดำเนินการ
+    id: MyObjectsInterface; //string
+    func: (id: MyObjectsInterface) => void; // ฟังก์ชันเรียกใช้งาน API จะรับค่าเป็นไอดีของข้อมูลที่ต้องการดำเนินการ id: string
 };
 
 // สร้าง type ชื่อ AppContext โดยภายในจะระบุฟังก์ชันที่จำเป็นต่อการแสดงกล่องข้อความ

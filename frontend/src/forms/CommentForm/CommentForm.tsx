@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAppContext } from "../../contexts/AppContext";
 import { useForm } from "react-hook-form";
 import { CommentFormData, CommentType } from "../../shared/types";
@@ -27,18 +27,21 @@ const CommentForm = ({ slug, commented, commenting, postId }: Props) => {
     // สำหรับตรวจสอบว่าเป็นการแสดงความคิดเห็นที่เคยกรอกอยู่แล้วใช่หรือไม่
     const [isCommenting, setIsCommenting] = useState<boolean>(commenting || false);
 
+    // ทำการเรียกใช้งาน AppContext Global State โดยเรียกใช้งานฟังก์ชัน showModal
+    const { showModal } = useAppContext();
+
     // อนุญาตให้ผู้ที่แสดงความคิดเห็นสามารถแก้ไขหรือลบความคิดเห็นได้
     const handleDelete = async () => {
         let commentInPost;
         if (commented && postId) {
             commentInPost = { postId: postId, commentId: commented._id };
-            try {
-                await apiClient.deleteMyComment(commentInPost);
-                navigate(0);
-            }
-            catch (e) {
-                showToast({ message: "เกิดข้อผิดพลาดในระหว่างการลบความคิดเห็นในบทความ", type: "ERROR" });
-            }
+            showModal({
+                title: "ยืนยันการลบข้อมูลความคิดเห็น",
+                message: "คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลความคิดเห็นนี้? การดำเนินการนี้ไม่สามารถกู้คืนได้",
+                type: "WARNING",
+                id: commentInPost,
+                func: apiClient.deleteMyComment,
+            });
         }
 
     };
@@ -214,19 +217,19 @@ const CommentForm = ({ slug, commented, commenting, postId }: Props) => {
                             {/* เลือกแสดงปุ่มกดตามสถานะภาพการล็อกอิน */}
                             {isLoggiedIn && commented && userInfo && commented.userId === userInfo.userId ? (<>
                                 <span className="flex justify-end gap-1">
-                                    <button
-                                        onClick={handleDelete}
+                                    <Link
+                                        onClick={() => { handleDelete(); }}
                                         className="p-2 text-sm transition-all duration-200 hover:bg-red-500 hover:text-white focus:text-black focus:bg-yellow-300 font-semibold text-white bg-red-700 rounded w-fit mr-3"
-                                    >
+                                        to={"#"}                                    >
                                         ลบความคิดเห็น
-                                    </button>
-                                    <button
+                                    </Link>
+                                    <Link
                                         onClick={() => { setIsCommenting(true) }}
                                         className="bg-blue-600 text-sm text-white h-full p-2 font-bold max-w-fit hover:bg-blue-500 rounded"
-
+                                        to={"#"}
                                     >
                                         แก้ไขความคิดเห็น
-                                    </button>
+                                    </Link>
                                 </span>
                             </>) : (<></>)}
                         </span>

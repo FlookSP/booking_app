@@ -25,11 +25,12 @@ const MyHotels = () => {
 
     // เมื่อผู้ใช้งานลบที่พัก
     const handleDelete = (id: string) => {
+        const hotelId = { hotelId: id };
         showModal({
             title: "ยืนยันการลบข้อมูลที่พัก",
             message: "คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้? การดำเนินการนี้ไม่สามารถกู้คืนได้",
             type: "WARNING",
-            id: id,
+            id: hotelId,
             func: apiClient.deleteMyHotelById,
         });
 

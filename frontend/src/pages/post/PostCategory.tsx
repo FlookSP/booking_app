@@ -50,6 +50,16 @@ const PostCategory = () => {
         apiClient.searchPosts(searchPostParams)
     );
 
+    // ถ้าผลลัพธ์ทั้งหมดมีแค่หน้าเดียว
+    if (data && data?.pagination.pages === 1) {
+        postSearch.savePostSearchValues(
+            description,
+            post_category ? post_category : "",
+            1, // อับเดตหน้าที่อยู่ในปัจจุบันเป็นหน้าแรกเมื่อเลือกประเภทบทความใหม่เสมอ 
+            "" // ส่วน comment
+        );
+    }
+
     return (
         <section className="w-full px-4 py-6 mx-auto max-w-7xl ">
             <div className="mb-3 text-left md:text-center">
@@ -105,7 +115,7 @@ const PostCategory = () => {
 
                         </div>
 
-                        {/* ส่วนแสดงรายละเอียดของที่พักที่พบ */}
+                        {/* ส่วนแสดงรายละเอียดของบทความที่พบ */}
                         <div>
                             {data?.data.map((post, index) => (
                                 <ViewPostSearchResultsCard key={index} post={post} />

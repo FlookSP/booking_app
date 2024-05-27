@@ -43,11 +43,12 @@ const PostSearchResultsCard = ({ post }: Props) => {
 
     // เมื่อผู้ใช้งานลบที่พัก
     const handleDelete = (id: string) => {
+        const postId = { postId: id };
         showModal({
             title: "ยืนยันการลบข้อมูลบทความ",
             message: "คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้? การดำเนินการนี้ไม่สามารถกู้คืนได้",
             type: "WARNING",
-            id: id,
+            id: postId,
             func: apiClient.deleteMyPostById,
         });
 

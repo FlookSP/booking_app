@@ -37,8 +37,6 @@ const ViewPostSearchResultsCard = ({ post }: Props) => {
     };
 
     return (
-        // lg:grid-cols-[2fr_3fr] คือ ถ้าเป็นหน้าจอขนาดใหญ่ ให้แสดงรูป และ รายละเอียดที่พัก ในแถวเดียวกัน (2 columns) 
-        // โดยใช้พื้นที่แสดงรูป 2 ส่วน และใช้พื้นที่แสดงรายละเอียดที่พัก 3 ส่วน 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] border border-slate-300 rounded-lg p-8 gap-8 mb-3">
             <div >
                 <img
