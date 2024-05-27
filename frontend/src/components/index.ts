@@ -23,7 +23,7 @@ import Timeline from "./Timeline";
 import AboutCTA from "./AboutCTA";
 import Modal from "./Modal";
 import Toast from "./Toast";
-import { PostSearchResultsCard, PostSearchBar, BlogPostCard, BlogCommentCard } from "./post";
+import { PostSearchResultsCard, PostSearchBar, BlogPostCard, BlogCommentCard, RecentPosts, PopularPosts, ViewPostSearchResultsCard } from "./post";
 
 export {
     Header,
@@ -55,4 +55,7 @@ export {
     PostSearchBar,
     BlogPostCard,
     BlogCommentCard,
+    RecentPosts,
+    PopularPosts,
+    ViewPostSearchResultsCard,
 };

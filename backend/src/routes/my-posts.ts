@@ -101,6 +101,14 @@ router.get("/search", async (req: Request, res: Response) => {
         // สร้าง Query สำหรับค้นหาที่พักใน MongoDB
         const query = constructSearchPostQuery(req.query);
 
+        // จัดรูปแบบ Sort Option ให้พร้อมทำงานด้วย MongoDB
+        let sortOptions = {};
+        switch (req.query.sortOption) {
+            case "popularPostDesc":
+                sortOptions = { view: -1 }; // โพสต์ยอดนิยม เรียงลำดับตามยอดวิวจากมากไปน้อย
+                break;
+        }
+
         // กำหนดข้อมูลพื้นฐานของการแสดงผลรองรับการทำ Pagination 
         // ขนาด Page Size ของจำนวนข้อมูลที่ Backend จะคืนไปให้ Frontend ในแต่ละหน้า Page
         const pageSize = 5;
@@ -110,7 +118,7 @@ router.get("/search", async (req: Request, res: Response) => {
         const skip = (pageNumber - 1) * pageSize;
 
         // ทำการค้นหาที่พักตามเงื่อนไขการ Search ต่าง ๆ ที่กำหนดข้างต้น
-        const posts = await Post.find(query).skip(skip).limit(pageSize);
+        const posts = await Post.find(query).sort(sortOptions).skip(skip).limit(pageSize);
 
         // จำนวนข้อมูลผลลัพธ์ทั้งหมดที่เจอในฐานข้อมูล โดยค้นหาตาม query ด้วยถ้ามี
         const total = await Post.countDocuments(query);
@@ -152,6 +160,30 @@ const constructSearchPostQuery = (queryParams: any) => {
             { title: new RegExp(queryParams.description, "i") },
             { content: new RegExp(queryParams.description, "i") },
         ];
+    }
+
+    if (queryParams.recentPosts === "lastWeekPosts") {
+        const now = new Date();
+
+        const oneWeekAgo = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate() - 7, // เจ็ดวันที่ผ่านมา
+        );
+
+        constructedQuery.createdAt = { $gte: oneWeekAgo };
+    }
+
+    if (queryParams.recentPosts === "oneMonthPosts") {
+        const now = new Date();
+
+        const oneMonthAgo = new Date(
+            now.getFullYear(),
+            now.getMonth() - 1,
+            now.getDate(),
+        );
+
+        constructedQuery.createdAt = { $gte: oneMonthAgo };
     }
 
     return constructedQuery;
@@ -354,7 +386,7 @@ router.put("/:id",
             // ทำการปรับปรุงข้อมูลที่พัก
             const post = await Post.findOneAndUpdate(
                 {
-                    _id: req.params.id, // หมายเลข id ของ Post ที่จะปรับปรุงข้แมูล
+                    _id: req.params.id, // หมายเลข id ของ Post ที่จะปรับปรุงข้อมูล
                     userId: req.userId, // req.userId อนุญาตให้ปรับปรุงเฉพาะบทความที่เป็นคนเขียน
                 },
                 // นำข้อมูลที่พักของเดิมในฐานข้อมูลมารวมกันกับของใหม่ที่กรอกเข้ามา

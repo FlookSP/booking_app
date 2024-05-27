@@ -2,7 +2,7 @@
 // ที่เราจะพัฒนาในภายหลัง
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Layout from "./layouts/Layout";
-import { Home, Register, NotFound, SignIn, Enroll, MyHotels, EditHotel, Search, Detail, Booking, MyBookings, Help, Feature, About, ForgetPassword, ResetPassword, HomePostPage, AddPost, EditPost, AddHotel, PostDetail } from "./pages";
+import { Home, Register, NotFound, SignIn, Enroll, MyHotels, EditHotel, Search, Detail, Booking, MyBookings, Help, Feature, About, ForgetPassword, ResetPassword, HomePostPage, AddPost, EditPost, AddHotel, PostDetail, PostCategory } from "./pages";
 import { useAppContext } from "./contexts/AppContext";
 
 const App = () => {
@@ -103,6 +103,14 @@ const App = () => {
           element={
             <Layout>
               <PostDetail />
+            </Layout>
+          }
+        />
+        <Route
+          path="/post-category/:category"
+          element={
+            <Layout>
+              <PostCategory />
             </Layout>
           }
         />

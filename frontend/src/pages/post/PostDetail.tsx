@@ -263,14 +263,14 @@ const PostDetail = () => {
                 รูปภาพทั้งหมด
             </h5>
             <div className="my-5 grid grid-cols-4 max-lg:grid-cols-1 gap-4">
-                {urls.map((url, index) => (<>
+                {urls.map((url, index) => (
 
                     <img
                         key={index}
                         src={url}
                         className='w-full h-64 object-cover'
                     />
-                </>))}
+                ))}
             </div>
 
             {/* แบบฟอร์มรับการแสดงความเห็น โดยกำหนดว่า commenting เป็น true */}
@@ -281,22 +281,22 @@ const PostDetail = () => {
                 <h1 className='text-3xl mt-5'>บทความแนะนำ</h1>
                 {/* ปุ่มเลื่อนซ้าย */}
                 <button aria-label="slide backward" className="absolute z-30 left-0 ml-10 focus:outline-none focus:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 cursor-pointer" id="prev" onClick={goPrev}>
-                    <HiChevronLeft className="text-gray-800 h-5 w-6" />
+                    <HiChevronLeft className="text-gray-800 h-5 w-6 bg-white" />
                 </button>
                 <div className="w-full h-full mx-auto overflow-x-hidden overflow-y-hidden ">
                     <div
                         id="slider"
                         className="h-full w-full flex lg:gap-8 md:gap-6 gap-14 items-center justify-start transition ease-out duration-700">
 
-                        {posts?.data.map((post, index) => (<>
+                        {posts?.data.map((post, index) => (
                             <BlogPostCard key={index} post={post} />
-                        </>
+
                         ))}
                     </div>
                 </div>
                 {/* ปุ่มเลื่อนขวา */}
                 <button aria-label="slide forward" className="absolute z-30 right-0 mr-10 focus:outline-none focus:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400" id="next" onClick={goNext}>
-                    <HiChevronRight className="text-gray-800 h-5 w-6" />
+                    <HiChevronRight className="text-gray-800 h-5 w-6 bg-white" />
                 </button>
             </div>
 
@@ -305,10 +305,10 @@ const PostDetail = () => {
                 <p className="mt-1 text-3xl text-left text-gray-800 sm:mx-6 sm:text-2xl md:text-3xl lg:text-3xl sm:text-center sm:mx-0">
                     ความเห็นทั้งหมดในโพสต์นี้
                 </p>
-                {(post.comments.length !== 0) ? (post.comments.map((comment, index) => (<>
-                    {/* แบบฟอร์มแสดงรายการความคิดเห็นทั้งหมดในบทความนี้ โดยกำหนด commenting เ็น false เพื่อเลือกแสดงแบบไม่ให้แก้ไขได้ */}
+                {(post.comments.length !== 0) ? (post.comments.map((comment, index) => (
+                    // แบบฟอร์มแสดงรายการความคิดเห็นทั้งหมดในบทความนี้ โดยกำหนด commenting เ็น false เพื่อเลือกแสดงแบบไม่ให้แก้ไขได้
                     <CommentForm key={index} commented={comment} postId={post._id} commenting={false} slug={post_slug} />
-                </>))) :
+                ))) :
                     (<>
                         <div className="flex items-center justify-center rounded-sm p-3 text-black-100 font-light">
                             ยังไม่มีการแสดงความคิดเห็น

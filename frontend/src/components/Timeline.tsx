@@ -25,7 +25,7 @@ const Timeline = () => {
                                 <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-slate-200 shadow">
                                     <div className="flex items-center justify-between space-x-2 mb-1">
                                         <div className="font-bold text-slate-900">จุดเริ่มต้น</div>
-                                        <time className="text-xs font-medium text-indigo-500">01/10/2567</time>
+                                        <time className="text-xs font-medium text-indigo-500">01/10/2566</time>
                                     </div>
                                     <div className="text-slate-500">วางแผนพัฒนาการเชื่อมโยงนักท่องเที่ยวเข้ากับเจ้าของที่พักโดยเทคโนโลยีที่ทันสมัย</div>
                                 </div>
@@ -42,7 +42,7 @@ const Timeline = () => {
                                 <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-slate-200 shadow">
                                     <div className="flex items-center justify-between space-x-2 mb-1">
                                         <div className="font-bold text-slate-900">ก่อตั้ง ThaiVacationHub.com </div>
-                                        <time className="text-xs font-medium text-indigo-500">01/11/2567</time>
+                                        <time className="text-xs font-medium text-indigo-500">01/11/2566</time>
                                     </div>
                                     <div className="text-slate-500">ก่อตั้ง ThaiVacationHub.com ขึ้นในกรุงเทพมหานคร ประเทศไทย</div>
                                 </div>
@@ -59,7 +59,7 @@ const Timeline = () => {
                                 <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-slate-200 shadow">
                                     <div className="flex items-center justify-between space-x-2 mb-1">
                                         <div className="font-bold text-slate-900">เริ่มต้นพัฒนาแพลตฟอร์ม</div>
-                                        <time className="text-xs font-medium text-indigo-500">01/12/2567</time>
+                                        <time className="text-xs font-medium text-indigo-500">01/12/2566</time>
                                     </div>
                                     <div className="text-slate-500">เริ่มต้นพัฒนา ThaiVacationHub.com เพื่อเป็นแพลตฟอร์มกลางระหว่างเจ้าของที่พักกับนักท่องเที่ยวในประเทศไทย</div>
                                 </div>

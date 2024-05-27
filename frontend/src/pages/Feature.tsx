@@ -1,67 +1,8 @@
 import { Link } from "react-router-dom"
 import { post_one, post_two, post_three, gmail } from "../assets"
-import { HiChevronLeft, HiChevronRight } from "react-icons/hi"
-import { useQuery } from "react-query";
-import * as apiClient from "../api-client";
-import { BlogPostCard } from "../components";
+import { RecentPosts, PopularPosts } from "../components";
 
 const Feature = () => {
-    // สำหรับบทความที่เกี่ยวข้อง
-    const searchPostParams = {
-        page: "",
-        userId: "",
-        description: "",
-        category: "",
-    };
-
-    // จะเริ่มต้นทำการค้นหาข้อมูลเมื่อโหลด Page นี้ โดยส่ง searchParams ไปยัง searchPosts เพื่อค้นหาข้อมูล
-    const { data: posts } = useQuery(["searchPosts", searchPostParams], () =>
-        apiClient.searchPosts(searchPostParams)
-    );
-
-    // สำหรับการเลื่อนบทความที่เกี่ยวข้อง
-    let defaultTransform = 0;
-
-    const goNext = () => {
-        defaultTransform = defaultTransform - 398;
-        const sliderNext = document.getElementById("slider");
-        if (sliderNext && Math.abs(defaultTransform) >= sliderNext.scrollWidth / 1.7)
-            defaultTransform = 0;
-
-        if (sliderNext) {
-            sliderNext.style.transform = "translateX(" + defaultTransform + "px)";
-        }
-    };
-
-    const goPrev = () => {
-        const slider = document.getElementById("slider");
-        if (Math.abs(defaultTransform) === 0) defaultTransform = 0;
-        else defaultTransform = defaultTransform + 398;
-        if (slider) {
-            slider.style.transform = "translateX(" + defaultTransform + "px)";
-        }
-    };
-
-    const goNextPopular = () => {
-        defaultTransform = defaultTransform - 398;
-        const sliderNextPopular = document.getElementById("sliderPopular");
-        if (sliderNextPopular && Math.abs(defaultTransform) >= sliderNextPopular.scrollWidth / 1.7)
-            defaultTransform = 0;
-
-        if (sliderNextPopular) {
-            sliderNextPopular.style.transform = "translateX(" + defaultTransform + "px)";
-        }
-    };
-
-    const goPrevPopular = () => {
-        const sliderPopular = document.getElementById("sliderPopular");
-        if (Math.abs(defaultTransform) === 0) defaultTransform = 0;
-        else defaultTransform = defaultTransform + 398;
-        if (sliderPopular) {
-            sliderPopular.style.transform = "translateX(" + defaultTransform + "px)";
-        }
-    };
-
     return (
         <div className="container mx-auto">
             {/* featured section */}
@@ -84,8 +25,8 @@ const Feature = () => {
                 {/* sub-main posts  */}
                 <div className="w-full md:w-4/7">
                     {/*<!-- post 1 -->*/}
-                    <div className="rounded w-full flex flex-col sm:flex-row mb-10">
-                        <img src={post_three} className=" block md:hidden lg:block rounded-md h-64 md:h-32 m-4 md:m-0" />
+                    <div className="rounded w-full flex flex-col sm:flex-row mb-10 ">
+                        <img src={post_three} className="object-cover block md:hidden lg:block rounded-md h-64 md:h-32 m-4 md:m-0 " />
                         <div className="bg-white rounded px-4 lg:mt-0 sm:mt-4 ">
                             <span className="text-blue-600 text-sm block"> แนะนำท่องเที่ยว </span>
                             <div className="md:mt-0 text-black font-semibold text-xl mb-2">
@@ -95,7 +36,7 @@ const Feature = () => {
                                 ที่เที่ยวประเทศไทย มีเยอะมาก ๆ มีให้เที่ยวแบบหลากสไตล์ ทั้งเที่ยวทะเล เที่ยวภูเขา เที่ยวน้ำตก เที่ยวป่า หรือแม้แต่เที่ยวในเมืองเก๋ๆ ก็มีหมด
                             </p>
                             <Link
-                                to="/recommendation"
+                                to={`/post-category/แนะนำท่องเที่ยว`}
                                 title=""
                                 className="inline-flex items-center justify-center pb-0.5 -mt-1 lg:text-sm max-lg:font-semibold text-blue-600 transition-all duration-200 border-b-2 border-transparent hover:border-blue-600 focus:border-blue-600"
                             >
@@ -119,7 +60,7 @@ const Feature = () => {
                     {/*<!-- post 2 -->*/}
 
                     <div className="rounded w-full flex flex-col sm:flex-row mb-10 ">
-                        <img src={post_two} className="block md:hidden lg:block rounded-md h-64 md:h-32 m-4 md:m-0 " />
+                        <img src={post_two} className="object-cover block md:hidden lg:block rounded-md h-64 md:h-32 m-4 md:m-0 " />
                         <div className="bg-white rounded px-4 lg:mt-0 sm:mt-4 ">
                             <span className="text-blue-600  text-sm block"> โปรโมชัน </span>
                             <div className="md:mt-0 text-gray-800 font-semibold text-xl mb-2">
@@ -129,7 +70,7 @@ const Feature = () => {
                                 คุณรู้รึเปล่า? ว่ามีวิธีง่าย ๆ ที่ทำให้คุณได้ท่องเที่ยวประเทศไทยในราคาคุ้มค่า ด้วยดีลพิเศษและโปรโมชั่นเด็ดจาก ThaiVacationHub.com
                             </p>
                             <Link
-                                to="/promotion"
+                                to={`/post-category/โปรโมชัน`}
                                 title=""
                                 className="inline-flex items-center justify-center pb-0.5 -mt-1 lg:text-sm max-lg:font-semibold text-blue-600 transition-all duration-200 border-b-2 border-transparent hover:border-blue-600 focus:border-blue-600"
                             >
@@ -151,7 +92,7 @@ const Feature = () => {
                     </div>
                     {/*<!-- post 3 -->*/}
                     <div className="rounded w-full flex flex-col sm:flex-row mb-10 ">
-                        <img src={post_one} className="block md:hidden lg:block rounded-md h-64 md:h-32 m-4 md:m-0 " />
+                        <img src={post_one} className="object-cover block md:hidden lg:block rounded-md h-64 md:h-32 m-4 md:m-0 " />
                         <div className="bg-white rounded px-4 lg:mt-0 sm:mt-4 ">
                             <span className="text-blue-600 text-sm block"> ปลายทางยอดนิยม </span>
                             <div className="md:mt-0 text-gray-800 font-semibold text-xl mb-2">
@@ -161,7 +102,7 @@ const Feature = () => {
                                 พิกัดเซิร์ฟสุดฮอตในเมืองไทย พร้อมอาหารจานเด็ดประจำถิ่น รวมถึงคำแนะนำอื่น ๆ ห้ามพลาด
                             </p>
                             <Link
-                                to="/destination"
+                                to={`/post-category/ปลายทางยอดนิยม`}
                                 title=""
                                 className="inline-flex items-center justify-center pb-0.5 -mt-1 lg:text-sm max-lg:font-semibold text-blue-600 transition-all duration-200 border-b-2 border-transparent hover:border-blue-600 focus:border-blue-600"
                             >
@@ -194,29 +135,8 @@ const Feature = () => {
                     ดูทั้งหมด
                 </Link>
             </div>
-
             {/* ส่วนแสดงบทความที่เกี่ยวข้อง */}
-            <div className='flex flex-col justify-center items-center mt-3 ' >
-                {/* ปุ่มเลื่อนซ้าย */}
-                <button aria-label="slide backward" className="absolute z-30 left-0 ml-10 focus:outline-none focus:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 cursor-pointer" id="prev" onClick={goPrev}>
-                    <HiChevronLeft className="text-gray-800 h-5 w-6" />
-                </button>
-                <div className="w-full h-full mx-auto overflow-x-hidden overflow-y-hidden ">
-                    <div
-                        id="slider"
-                        className="h-full flex lg:gap-8 md:gap-6 gap-14 items-center justify-start transition ease-out duration-700">
-                        {posts && posts.data.map((post, index) => (<>
-                            <BlogPostCard key={index} post={post} />
-                        </>
-                        ))}
-
-                    </div>
-                </div>
-                {/* ปุ่มเลื่อนขวา */}
-                <button aria-label="slide forward" className="absolute z-30 right-0 mr-10 focus:outline-none focus:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400" id="next" onClick={goNext}>
-                    <HiChevronRight className="text-gray-800 h-5 w-6" />
-                </button>
-            </div>
+            <RecentPosts />
 
             {/*<!-- subscribe -->*/}
             <div className="rounded flex md:shadow mt-12">
@@ -234,39 +154,17 @@ const Feature = () => {
                     </form>
                 </div>
             </div>
-            {/*!-- ens subscribe section -->/}
+            {/*!-- ens subscribe section -->*/}
 
-
-
-      {/*!-- popular posts --*/}
+            {/*!-- popular posts --*/}
             <div className="flex mt-16 mb-4 px-4 lg:px-0 items-center justify-between">
                 <h2 className="font-bold text-3xl">โพสต์ยอดนิยม</h2>
                 <Link to="/popular-posts" className="bg-gray-200 hover:bg-gray-400 px-3 py-1 rounded cursor-pointer">
                     ดูทั้งหมด
                 </Link>
             </div>
-            {/* ส่วนแสดงบทความที่เกี่ยวข้อง */}
-            <div className='flex flex-col justify-center items-center mt-3 ' >
-                {/* ปุ่มเลื่อนซ้าย */}
-                <button aria-label="slide backward" className="absolute z-30 left-0 ml-10 focus:outline-none focus:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 cursor-pointer" id="prevPopular" onClick={goPrevPopular}>
-                    <HiChevronLeft className="text-gray-800 h-5 w-6" />
-                </button>
-                <div className="w-full h-full mx-auto overflow-x-hidden overflow-y-hidden ">
-                    <div
-                        id="sliderPopular"
-                        className="h-full flex lg:gap-8 md:gap-6 gap-14 items-center justify-start transition ease-out duration-700">
+            <PopularPosts />
 
-                        {posts && posts.data.map((post, index) => (<>
-                            <BlogPostCard key={index} post={post} />
-                        </>
-                        ))}
-                    </div>
-                </div>
-                {/* ปุ่มเลื่อนขวา */}
-                <button aria-label="slide forward" className="absolute z-30 right-0 mr-10 focus:outline-none focus:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400" id="nextPopular" onClick={goNextPopular}>
-                    <HiChevronRight className="text-gray-800 h-5 w-6" />
-                </button>
-            </div>
         </div>
     )
 }

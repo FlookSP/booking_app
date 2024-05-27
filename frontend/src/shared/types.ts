@@ -165,14 +165,16 @@ export type PostSearchResponse = {
 
 // สร้าง SearchPostParams Type เพื่อช่วยในการตรวจสอบการทำงานของข้อมูลค้นหาหรือค่า Filter ที่จะรับเข้ามา
 export type SearchPostParams = {
-    // ข้อมูลค้นหาจาก SearchBar Component ที่จะส่งไป Backend
+    // ข้อมูลค้นหาจากที่จะส่งไป Backend
     // ? คือเป็น optional string
-    id?: string;
     description?: string;
     userId?: string;
     category?: string;
     // ข้อมูลหน้าจาก Pagination
     page?: string;
+    // สำหรับการค้นหา โพสต์ล่าสุด และ โพสต์ยอดนิยม
+    sortOption?: string;
+    recentPosts?: string; // รองรับการระบุระยะเวลาที่สร้างโพสได้
 };
 
 // รายละเอียดของตัวแปรต่าง ๆ ใน CommentForm

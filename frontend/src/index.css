@@ -5,25 +5,10 @@
 @tailwind components;
 @tailwind utilities;
 
-.hero {
-  background-image: url("./assets/bg.webp");
-  background-size: cover;
-  background-attachment: fixed; /* เวลา Scroll เม้าส์ลงมา รูปภาพ Background จะอยู่กับที่เมื่อเทียบกับ Viewpoint */
-  position: relative; /* แสดงรูปภาพต่อจาก Component อื่น ๆ*/
-  top: 0;
-  left: 0;
-  z-index: -1; /* กำหนดให้แสดงรูปภาพ Background ต่ำกว่า Component อื่น ๆ */
-  width: 100%;
-  height: 100%; /* กำหนดให้แสดงขนาดความสูงของรูป Background ตามขนาดจริงเสมอ */
-  padding-top: 10%; /* กำหนดตำแหน่งแสดงข้อความ */
-  padding-right: 50px;
-  color: #fff;
-}
-
 .register {
   background-image: url("./assets/register_background.jpg");
   background-size: cover;
-  background-attachment: scroll; /* เวลา Scroll เม้าส์ลงมา รูปภาพ Background จะเลื่อนตามมาด้วย */  
+  background-attachment: scroll; /* เวลา Scroll เม้าส์ลงมา รูปภาพ Background จะเลื่อนตามมาด้วย */
   width: 100%;
   height: auto; /* เพื่อให้รูป Background สามารถปรับขนาดตามความสูงของแบบฟอร์มได้โดยอัตโนมัติ */
 }
@@ -31,7 +16,7 @@
 .login {
   background-image: url("./assets/log_in.jpg");
   background-size: cover;
-  background-attachment: scroll; /* เวลา Scroll เม้าส์ลงมา รูปภาพ Background จะเลื่อนตามมาด้วย */  
+  background-attachment: scroll; /* เวลา Scroll เม้าส์ลงมา รูปภาพ Background จะเลื่อนตามมาด้วย */
   width: 100%;
   height: auto; /* เพื่อให้รูป Background สามารถปรับขนาดตามความสูงของแบบฟอร์มได้โดยอัตโนมัติ */
 }

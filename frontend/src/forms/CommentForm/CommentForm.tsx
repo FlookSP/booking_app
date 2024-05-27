@@ -152,13 +152,15 @@ const CommentForm = ({ slug, commented, commenting, postId }: Props) => {
                         {isLoggiedIn && userInfo && userInfo.userId ? (
                             <>
                                 {/* แสดงปุ่ม "ยกเลิกการแสดงความคิดเห็น" นี้เฉพาะในแบบฟอร์มตรงส่วนแสดงรายการความคิดเห็นเท่านั้น */}
-                                {!commenting && <button
-                                    onClick={() => { setIsCommenting(false); navigate(0); }}
-                                    className="p-2 text-sm transition-all duration-200 hover:bg-red-500 hover:text-white focus:text-black focus:bg-yellow-300 font-bold text-white bg-red-700 rounded w-fit mr-3"
+                                {!commenting &&
+                                    <button
+                                        onClick={() => { setIsCommenting(false); navigate(0); }}
+                                        className="p-2 text-sm transition-all duration-200 hover:bg-red-500 hover:text-white focus:text-black focus:bg-yellow-300 font-bold text-white bg-red-700 rounded w-fit mr-3"
+                                    >
+                                        ยกเลิกการแสดงความคิดเห็น
+                                    </button>}
+                                <button className="bg-blue-600 text-white h-full p-2 font-bold hover:bg-blue-500  w-fit rounded"
                                 >
-                                    ยกเลิกการแสดงความคิดเห็น
-                                </button>}
-                                <button className="bg-blue-600 text-white h-full p-2 font-bold hover:bg-blue-500  w-fit rounded">
                                     แสดงความคิดเห็น
                                 </button></>
                         ) : (
@@ -221,6 +223,7 @@ const CommentForm = ({ slug, commented, commenting, postId }: Props) => {
                                     <button
                                         onClick={() => { setIsCommenting(true) }}
                                         className="bg-blue-600 text-sm text-white h-full p-2 font-bold max-w-fit hover:bg-blue-500 rounded"
+
                                     >
                                         แก้ไขความคิดเห็น
                                     </button>

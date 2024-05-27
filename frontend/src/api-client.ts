@@ -345,6 +345,8 @@ export const searchPosts = async (
   queryParams.append("category", searchParams?.category || "");
   queryParams.append("userId", searchParams?.userId || "");
   queryParams.append("page", searchParams?.page || "");
+  queryParams.append("sortOption", searchParams?.sortOption || "");
+  queryParams.append("recentPosts", searchParams?.recentPosts || "");
 
   // ส่งข้อมูลค้นหาไปยัง Backend API ที่เกี่ยวข้อง
   const response = await fetch(`${API_BASE_URL}/api/my-posts/search?${queryParams}`, {

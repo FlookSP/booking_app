@@ -26,7 +26,7 @@ const BlogPostCard = ({ post }: Props) => {
             </Link>
             <div className="relative flex flex-col items-start px-6 bg-white border border-t-0 border-gray-200 py-7 rounded-b-2xl w-[300px]">
                 <div className="bg-red-400 absolute top-0 -mt-3 flex items-center px-3 py-1.5 leading-none w-auto inline-block rounded-full text-xs font-medium uppercase text-white inline-block">
-                    <span>{post.category}</span>
+                    <span >{post.category}</span>
                 </div>
                 <h2 className="text-base text-gray-500 font-bold sm:text-lg md:text-xl line-clamp-1 ">
                     <Link reloadDocument to={`/post-detail/${post.slug}`}>{post.title}</Link>
