@@ -52,7 +52,7 @@ const ViewPostSearchResultsCard = ({ post }: Props) => {
                 </div>
                 <div>
                     <Link
-                        to={`/edit-post/${post._id}`}
+                        to={`/post-detail/${post.slug}`}
                         className="text-2xl font-bold cursor-pointer"
                     >
                         {/* line-clamp คือ ตัดทอนข้อความและเพิ่มจุดไข่ปลา (...) ต่อท้ายตามขนาดความกว้างของพื้นที่โดยอัตโนมัติ ส่วน-1 คือ แสดง 1 บรรทัดแล้วตัด */}
